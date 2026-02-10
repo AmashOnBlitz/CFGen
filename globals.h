@@ -16,6 +16,11 @@ constexpr int GET_ARGUMENT_INDEX(int argc)
 enum ERRORCODE : int {
     ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_GEN    = 0x001f,
     ERRORCODE_NO_ARGUMENTS_SPECIFIED            = 0x002f,
+    ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_REG    = 0x003f
+};
+
+enum STRINGCODE : int{
+    STRINGCODE_HELP                             = 0x101f
 };
 
 class Constants
@@ -25,6 +30,9 @@ private:
 public:
 [[nodiscard]]
 std::string GetErrorString(ERRORCODE errC);
+
+[[nodiscard]]
+std::string GetString(STRINGCODE strC);
 
 public:
     Constants();
