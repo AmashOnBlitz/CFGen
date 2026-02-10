@@ -21,9 +21,21 @@ std::string Constants::GetErrorString(ERRORCODE errC)
         );
         break;
     }
-    case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_REG:{
+    case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_MACR_REG:{
         errString = fetchStrFrmChar(
-            GetInsufficientArgumentsForRegErrorString()
+            GetInsufficientArgumentsForRegMacErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_REG:{
+        errString = fetchStrFrmChar(
+            GetInsufficientArgumentsForRegTempErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_FILE_DOES_NOT_EXIST_FOR_TEMP_REG:{
+        errString = fetchStrFrmChar(
+            GetFileDoesNotExitForTempGenErrorString()
         );
         break;
     }

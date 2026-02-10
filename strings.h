@@ -2,5 +2,7 @@
 
 char* GetNoArgumentsErrorString();
 char* GetInsufficientArgumentsForGenErrorString();
-char* GetInsufficientArgumentsForRegErrorString();
+char* GetInsufficientArgumentsForRegMacErrorString();
+char* GetInsufficientArgumentsForRegTempErrorString();
+char* GetFileDoesNotExitForTempGenErrorString();
 char* GetStringHelp();

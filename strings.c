@@ -1,6 +1,9 @@
 #include "strings.h"
 #include <cstdlib>
 #include <cstring>
+#include "commands.h"
+
+
 
 static char* assignToCharBuff(const char* str)
 {
@@ -29,21 +32,50 @@ char* GetInsufficientArgumentsForGenErrorString()
     static const char errStr[] =
         "Insufficient Arguments For Generating A File!\n"
         "Least no of arguments are 3\n"
-        "-gen <file-name> <template-name>\n"
-        "example : -gen header.h myHeaderTemplate\n"
+        COMMAND_GEN
+        " <file-name> <template-name>\n"
+        "example : "
+        COMMAND_GEN
+        " header.h myHeaderTemplate\n"
         "Use -h for help";
 
     RETURN_ERR_STRING(errStr);
 }
 
-char *GetInsufficientArgumentsForRegErrorString()
+char *GetInsufficientArgumentsForRegMacErrorString()
 {
     static const char errStr[] =
         "Insufficient Arguments For Registering A Macro!\n"
         "Least no of arguments are 3\n"
-        "-reg <macro-name> <macro-value>\n"
-        "example : -reg Name Foo_Bar_Baz\n"
+        COMMAND_REGISTER_MACRO
+        " <macro-name> <macro-value>\n"
+        "example : "
+        COMMAND_REGISTER_MACRO
+        " Name Foo_Bar_Baz\n"
         "Use -h for help";
+
+    RETURN_ERR_STRING(errStr);
+}
+
+char *GetInsufficientArgumentsForRegTempErrorString()
+{
+    static const char errStr[] = 
+    "Insufficient Arguments For Registering A Template!\n"
+        "Least no of arguments are 3\n"
+        COMMAND_REGISTER_TEMPLATE
+        " <template-name> <template-file-name>\n"
+        "example : "
+        COMMAND_REGISTER_TEMPLATE
+        " Temp1 tempheader.h\n"
+        "Use -h for help";
+        RETURN_ERR_STRING(errStr);
+}
+
+char *GetFileDoesNotExitForTempGenErrorString()
+{
+    static const char errStr[] = 
+    "ERROR : Provided File Does Not Exist \n"
+    "Template Registeration Failed ------ \n";
 
     RETURN_ERR_STRING(errStr);
 }
@@ -57,13 +89,15 @@ char* GetStringHelp()
         "  cfgen <command> [options]\n"
         "\n"
         "Commands:\n"
-        "  -h                           Show this help message\n"
-        "  -gen <name> <tpl>            Generate a file using a template\n"
-        "  -reg <macro-name> <value>    To Register A Macro"
+        "  -h                                              Show this help message\n"
+        "  " COMMAND_GEN " <name> <tpl>                            Generate a file using a template\n"
+        "  " COMMAND_REGISTER_MACRO " <macro-name> <value>                    To Register A Macro\n"
+        "  " COMMAND_REGISTER_TEMPLATE " <template-name> <template-file-name>    To Register A Template For File generation"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
-        "  cfgen -gen main.c mainTemplate\n";
+        "  cfgen " COMMAND_GEN " main.c mainTemplate\n"
+        "  cfgen " COMMAND_REGISTER_MACRO " Name Foo_Bar_Baz\n";
 
     RETURN_ERR_STRING(helpStr);
 }
