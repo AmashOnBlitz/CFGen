@@ -69,6 +69,22 @@ char *GetInsufficientArgumentsForRegTempErrorString()
         RETURN_STRING(errStr);
 }
 
+char *GetInsufficientArgumentsForDelTempErrorString()
+{
+    static const char errStr[] = 
+    "Insufficient Arguments For Deleting A Template!\n"
+        "Least no of arguments are 3\n"
+        "---\n"
+        COMMAND_DELETE_TEMPLATE
+        " <template-name> \n"
+        "---\n"
+        "example : "
+        COMMAND_DELETE_TEMPLATE
+        " myTemplate\n"
+        "Use -h for help";
+        RETURN_STRING(errStr);
+}
+
 char *GetFileDoesNotExitForTempGenErrorString()
 {
     static const char errStr[] = 
@@ -97,6 +113,14 @@ char *GetTempAlrExistsErrorString()
     RETURN_STRING(errStr);
 }
 
+char *GetTempNotFoundForDeletion()
+{
+    static const char errStr[] = 
+    "ERROR : Template With This Name Does Not Exist!\n"
+    "Removal Aborted ---\n";
+    RETURN_STRING(errStr);
+}
+
 char *GetCannotOpenProvidedFileErrorString()
 {
     static const char errStr[] = 
@@ -114,7 +138,7 @@ char *GetConnotCopyScriptFileErrorString()
 char *GetTemplateNotfoundErrorString()
 {
     static const char errStr[] = 
-    "ERROR : The Requested Template Is Not Found Records!\n";
+    "ERROR : The Requested Template Is Not Found In Template Records!\n";
     RETURN_STRING(errStr);
 }
 
@@ -156,8 +180,14 @@ char* GetStringHelp()
     RETURN_STRING(helpStr);
 }
 
-char *GetStringRegSuccessfull()
+char *GetStringRegTempSuccessfull()
 {
     static const char str[] = "Template Registeration Succesfull ------\n";
+    RETURN_STRING(str);
+}
+
+char *GetStringDelTempSuccessfull()
+{
+    static const char str[] = "Template Deletion Succesfull ------\n";
     RETURN_STRING(str);
 }

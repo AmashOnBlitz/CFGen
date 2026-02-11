@@ -26,6 +26,15 @@ int main(int argc, char const *argv[])
                 std::cout << RegisterTemp(argc,argv);
             }
         }
+        else if (cmd == COMMAND_DELETE_TEMPLATE_TRIMMED){
+            if (argc < NO_OF_ARGUMENTS(2)){
+                std::cout <<
+                Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL)
+                << std::endl;
+            }else{
+                std::cout << DeleteTemp(argc,argv);
+            }
+        }
         else if(cmd == COMMAND_REGISTER_MACRO_TRIMMED){ // TODO : ADD FUNCTIONALITY...
             if (argc < NO_OF_ARGUMENTS(3)){
                 std::cout << 

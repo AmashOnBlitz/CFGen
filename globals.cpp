@@ -13,6 +13,7 @@ std::string fetchStrFrmChar(char* _c){
 std::string Constants::GetErrorString(ERRORCODE errC)
 {
     std::string errString = INTERNAL_ERR_STR_NOT_FOUND;
+    errString = errString + "\nError Code : " + std::to_string(static_cast<int>(errC));
     switch (errC)
     {
     case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_GEN:{
@@ -30,6 +31,12 @@ std::string Constants::GetErrorString(ERRORCODE errC)
     case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_REG:{
         errString = fetchStrFrmChar(
             GetInsufficientArgumentsForRegTempErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL:{
+        errString = fetchStrFrmChar(
+            GetInsufficientArgumentsForDelTempErrorString()
         );
         break;
     }
@@ -87,6 +94,12 @@ std::string Constants::GetErrorString(ERRORCODE errC)
         );
         break;
     }
+    case ERRORCODE_TEMPLATE_NOT_FOUND_FOR_DEL:{
+        errString = fetchStrFrmChar(
+            GetTemplateNotfoundErrorString()
+        );
+        break;
+    }
     default: [[unlikely]]
         break;
     }
@@ -103,7 +116,11 @@ std::string Constants::GetString(STRINGCODE strC)
         break;
     }
     case STRINGCODE_TEMPLATE_REG_SUCCESSFULL:{
-        str = fetchStrFrmChar(GetStringRegSuccessfull());
+        str = fetchStrFrmChar(GetStringRegTempSuccessfull());
+        break;
+    }
+    case STRINGCODE_TEMPLATE_DEL_SUCCESSFULL:{
+        str = fetchStrFrmChar(GetStringDelTempSuccessfull());
         break;
     }
     default:

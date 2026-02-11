@@ -68,7 +68,7 @@ std::string removeTemplate(const std::string& name)
     loadTemplates();
     
     if (!templateExists(name)) {
-        return Constants::Instance().GetErrorString(ERRORCODE_TEMPLATE_NOT_FOUND);
+        return Constants::Instance().GetErrorString(ERRORCODE_TEMPLATE_NOT_FOUND_FOR_DEL);
     }
 
     std::string scriptFilename;
