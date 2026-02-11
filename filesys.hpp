@@ -1,3 +1,4 @@
+#pragma once 
 #include <cstdlib>
 #include <filesystem>
 #include <string>
@@ -25,7 +26,7 @@ fs::path getAppDataPath()
     throw std::runtime_error("Cannot determine app data directory");
 }
 
-fs::path getMyAppDir()
+fs::path getAppDataDir()
 {
     fs::path base = getAppDataPath();
     fs::path appDir = base / "CFGen"; 

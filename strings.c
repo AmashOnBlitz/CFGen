@@ -3,8 +3,6 @@
 #include <cstring>
 #include "commands.h"
 
-
-
 static char* assignToCharBuff(const char* str)
 {
     if (!str) return NULL;
@@ -16,7 +14,7 @@ static char* assignToCharBuff(const char* str)
     memcpy(buff, str, len);
     return buff;
 }
-#define RETURN_ERR_STRING(str) return assignToCharBuff(str)
+#define RETURN_STRING(str) return assignToCharBuff(str)
 
 char* GetNoArgumentsErrorString()
 {
@@ -24,7 +22,7 @@ char* GetNoArgumentsErrorString()
         "No Arguments Specified\n"
         "Use -h for Help";
 
-    RETURN_ERR_STRING(errStr);
+    RETURN_STRING(errStr);
 }
 
 char* GetInsufficientArgumentsForGenErrorString()
@@ -39,7 +37,7 @@ char* GetInsufficientArgumentsForGenErrorString()
         " header.h myHeaderTemplate\n"
         "Use -h for help";
 
-    RETURN_ERR_STRING(errStr);
+    RETURN_STRING(errStr);
 }
 
 char *GetInsufficientArgumentsForRegMacErrorString()
@@ -54,7 +52,7 @@ char *GetInsufficientArgumentsForRegMacErrorString()
         " Name Foo_Bar_Baz\n"
         "Use -h for help";
 
-    RETURN_ERR_STRING(errStr);
+    RETURN_STRING(errStr);
 }
 
 char *GetInsufficientArgumentsForRegTempErrorString()
@@ -68,16 +66,72 @@ char *GetInsufficientArgumentsForRegTempErrorString()
         COMMAND_REGISTER_TEMPLATE
         " Temp1 tempheader.h\n"
         "Use -h for help";
-        RETURN_ERR_STRING(errStr);
+        RETURN_STRING(errStr);
 }
 
 char *GetFileDoesNotExitForTempGenErrorString()
 {
     static const char errStr[] = 
     "ERROR : Provided File Does Not Exist \n"
-    "Template Registeration Failed ------ \n";
+    "Template Registeration Failed ------ \n"
+    "---\n"
+    "Command Structure :\n"
+    COMMAND_REGISTER_TEMPLATE
+    " <template-name> <template-file-name>\n";
+    RETURN_STRING(errStr);
+}
 
-    RETURN_ERR_STRING(errStr);
+char *GetTempRegFileCannotBeCreatedErrorString()
+{
+    static const char errStr[] = 
+    "ERROR : Cannot Create Template Record File!\n"
+    "Please Check The Permissions Or Reinstall The App";
+    RETURN_STRING(errStr);
+}
+
+char *GetTempAlrExistsErrorString()
+{
+    static const char errStr[] = 
+    "ERROR : Template With This Name Already Exists!\n"
+    "Please Use A Unique Name Or Remove This Template!";
+    RETURN_STRING(errStr);
+}
+
+char *GetCannotOpenProvidedFileErrorString()
+{
+    static const char errStr[] = 
+    "ERROR : Cannot Open Provided File! \n";
+    RETURN_STRING(errStr);
+}
+
+char *GetConnotCopyScriptFileErrorString()
+{
+    static const char errStr[] = 
+    "ERROR : Cannot Open Provided File And Copy It To Required Destination! \n";
+    RETURN_STRING(errStr);
+}
+
+char *GetTemplateNotfoundErrorString()
+{
+    static const char errStr[] = 
+    "ERROR : The Requested Template Is Not Found Records!\n";
+    RETURN_STRING(errStr);
+}
+
+char *GetTemplateFileCannotBeWritten()
+{
+    static const char errStr[] = 
+    "ERROR : The Template Record File Cannot Be Opened!\n"
+    "Checking Permissions Or Reinstalling The App May Help\n";
+    RETURN_STRING(errStr);
+}
+
+char *GetCannotDeleteScriptFile()
+{
+    static const char errStr[] = 
+    "ERROR : The Adjacent Template File Cannot Be Deleted!\n"
+    "Checking Permissions Or Manually Deleting It May Help\n";
+    RETURN_STRING(errStr);
 }
 
 char* GetStringHelp()
@@ -99,6 +153,11 @@ char* GetStringHelp()
         "  cfgen " COMMAND_GEN " main.c mainTemplate\n"
         "  cfgen " COMMAND_REGISTER_MACRO " Name Foo_Bar_Baz\n";
 
-    RETURN_ERR_STRING(helpStr);
+    RETURN_STRING(helpStr);
 }
 
+char *GetStringRegSuccessfull()
+{
+    static const char str[] = "Template Registeration Succesfull ------\n";
+    RETURN_STRING(str);
+}

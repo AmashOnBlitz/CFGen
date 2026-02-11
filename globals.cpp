@@ -45,7 +45,48 @@ std::string Constants::GetErrorString(ERRORCODE errC)
         );
         break;
     }
-    
+    case ERRORCODE_CANNOT_CREATE_TEMPLATE_FILE:{
+        errString = fetchStrFrmChar(
+            GetTempRegFileCannotBeCreatedErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_CANNOT_OPEN_PROVIDED_FILE:{
+        errString = fetchStrFrmChar(
+            GetCannotOpenProvidedFileErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_CANNOT_COPY_SCRIPT_FILE:{
+        errString = fetchStrFrmChar(
+            GetConnotCopyScriptFileErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_TEMPLATE_NOT_FOUND:{
+        errString = fetchStrFrmChar(
+            GetTemplateNotfoundErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_CANNOT_WRITE_TEMPLATE_FILE:{
+        errString = fetchStrFrmChar(
+            GetTemplateFileCannotBeWritten()
+        );
+        break;
+    }
+    case ERRORCODE_TEMPLATE_ALR_EXISTS:{
+        errString = fetchStrFrmChar(
+            GetTempAlrExistsErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_CANNOT_DELETE_SCRIPT_FILE:{
+        errString = fetchStrFrmChar(
+            GetCannotDeleteScriptFile()
+        );
+        break;
+    }
     default: [[unlikely]]
         break;
     }
@@ -59,6 +100,10 @@ std::string Constants::GetString(STRINGCODE strC)
     {
     case STRINGCODE_HELP:{
         str = fetchStrFrmChar(GetStringHelp());
+        break;
+    }
+    case STRINGCODE_TEMPLATE_REG_SUCCESSFULL:{
+        str = fetchStrFrmChar(GetStringRegSuccessfull());
         break;
     }
     default:

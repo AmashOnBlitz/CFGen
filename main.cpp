@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
             Constants::Instance().GetString(STRINGCODE_HELP)
             << std::endl;
         }
-        else if (cmd == COMMAND_REGISTER_TEMPLATE_TRIMMED){ // TODO : ADD FUNCTIONALITY ---
+        else if (cmd == COMMAND_REGISTER_TEMPLATE_TRIMMED){ // Funtionality Complete ---
             if (argc < NO_OF_ARGUMENTS(3)){
                 std::cout <<
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_REG)
