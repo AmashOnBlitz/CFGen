@@ -36,7 +36,15 @@ std::string addTemplate(std::string name, std::string value)
         );
     }
 
-    fs::path outScript = getAppDataDir() / inScript.filename();
+    fs::path outbase = getAppDataDir() / name;
+    if (!fs::exists(outbase)){
+        if(!fs::create_directory(outbase)){
+            return Constants::Instance().GetErrorString(
+            ERRORCODE_CANNOT_COPY_SCRIPT_FILE
+            );
+        }
+    }
+    fs::path outScript = outbase / inScript.filename();
 
     try {
     fs::copy_file(
@@ -57,7 +65,7 @@ std::string addTemplate(std::string name, std::string value)
         return Constants::Instance().GetErrorString(ERRORCODE_CANNOT_CREATE_TEMPLATE_FILE);
     }
 
-    file << name << TMP_VAL_DELIM << value << "\n";
+    file << name << TMP_VAL_DELIM << inScript.filename().string() << "\n";
     file.close();
 
     return "";
@@ -89,9 +97,10 @@ std::string removeTemplate(const std::string& name)
     for (const auto& pair : templateTable) {
         file << pair.first << TMP_VAL_DELIM << pair.second << "\n";
     }
-    file.close();
+    file.close(); 
 
-    fs::path scriptPath = getAppDataDir() / fs::path(scriptFilename).filename();
+    fs::path scriptPathBase = getAppDataDir() / name;
+    fs::path scriptPath = scriptPathBase / fs::path(scriptFilename).filename();
     if (fs::exists(scriptPath)) {
         std::error_code ec;
         fs::remove(scriptPath, ec);

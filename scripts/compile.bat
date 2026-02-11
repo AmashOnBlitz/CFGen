@@ -20,10 +20,10 @@ set OBJ_DIR=%OUTPUT_DIR%\obj
 set EXE=%OUTPUT_DIR%\cfgen.exe
 
 :: Source files
-set SOURCES=main.cpp strings.c globals.cpp TemplateRegister.cpp TemplateDb.cpp
+set SOURCES=src\main.cpp src\strings.c src\globals.cpp src\TemplateRegister.cpp src\TemplateDb.cpp
 
 :: Compiler flags
-set CXXFLAGS=-std=c++20 -O0 -g -pipe
+set CXXFLAGS=-std=c++20 -O0 -g -pipe -Iinclude
 
 :: Create output directories
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
