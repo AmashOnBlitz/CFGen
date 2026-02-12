@@ -30,7 +30,7 @@ std::string DeleteTemp(int argc, char const* argv[])
         return Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL);
     }
 
-    std::string out = removeTemplate(argv[2]);
+    std::string out = removeTemplate(argv[3]);
     if (out != ""){
         return out; 
     }

@@ -91,12 +91,12 @@ char *GetInsufficientArgumentsForDelTempErrorString()
     "Insufficient Arguments For Deleting A Template!\n"
         "Least no of arguments are 3\n"
         "---\n"
-        COMMAND_DELETE_TEMPLATE
-        " <template-name> \n"
+        COMMAND_DELETE
+        " -t <template-name> \n"
         "---\n"
         "example : "
-        COMMAND_DELETE_TEMPLATE
-        " myTemplate\n"
+        COMMAND_DELETE
+        " -t myTemplate\n"
         "Use -h for help";
         RETURN_STRING(errStr);
 }
@@ -196,12 +196,16 @@ char* GetStringHelp()
         "  -h                                              Show this help message\n"
         "  " COMMAND_GEN            " <name> <tpl>                            Generate a file using a template\n"
         "  " COMMAND_REGISTER       " -m <macro-name> <value>                 To Register A Macro\n"
-        "  " COMMAND_REGISTER       " -t <template-name> <template-file-name> To Register A Template For File generation"
+        "  " COMMAND_REGISTER       " -t <template-name> <template-file-name> To Register A Template For File generation\n"
+        "  " COMMAND_DELETE         " -m <macro-name>                         Delete a Macro\n"
+        "  " COMMAND_DELETE         " -t <template-name>                      Delete a Template\n"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
         "  cfgen " COMMAND_GEN  " main.c mainTemplate\n"
-        "  cfgen " COMMAND_REGISTER " -m Name Foo_Bar_Baz\n";
+        "  cfgen " COMMAND_REGISTER " -m Name Foo_Bar_Baz\n"
+        "  cfgen " COMMAND_DELETE   " -m Name\n"
+        "  cfgen " COMMAND_DELETE   " -t Temp1\n";
 
     RETURN_STRING(helpStr);
 }
