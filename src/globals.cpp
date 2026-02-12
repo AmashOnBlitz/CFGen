@@ -28,6 +28,12 @@ std::string Constants::GetErrorString(ERRORCODE errC)
         );
         break;
     }
+    case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_MACR_DEL:{
+        errString = fetchStrFrmChar(
+            GetInsufficientArgumentsForDelMacErrorString()
+        );
+        break;
+    }
     case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_REG:{
         errString = fetchStrFrmChar(
             GetInsufficientArgumentsForRegTempErrorString()

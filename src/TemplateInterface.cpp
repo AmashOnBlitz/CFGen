@@ -1,4 +1,4 @@
-#include "TemplateRegister.h"
+#include "TemplateInterface.h"
 #include <filesystem>
 #include "globals.h"
 #include <iostream>
@@ -37,4 +37,35 @@ std::string DeleteTemp(int argc, char const* argv[])
     
     std::string str = Constants::Instance().GetString(STRINGCODE_TEMPLATE_DEL_SUCCESSFULL) + "Template : " + argv[3] + " Removed!";
     return str;
+}
+
+std::string ShowAllTemplates()
+{
+    const auto& templates = getTemplateTable();
+    if (templates.empty()) {
+        return "No templates available.";
+    }
+
+    std::string out = "Templates:\n";
+    out += "----------------------------------------------------\n";
+    out += "| #  | Template Name         | File Path           |\n";
+    out += "----------------------------------------------------\n";
+
+    int index = 1;
+    for (const auto& temp : templates) {
+        std::string name = temp.first;
+        std::string path = temp.second;
+
+        if (name.length() > 20) name = name.substr(0, 17) + "...";
+        if (path.length() > 20) path = path.substr(0, 17) + "...";
+
+        out += "| " + std::to_string(index) + std::string(2 - std::to_string(index).length(), ' ')
+             + " | " + name + std::string(20 - name.length(), ' ')
+             + " | " + path + std::string(20 - path.length(), ' ') + " |\n";
+
+        index++;
+    }
+
+    out += "----------------------------------------------------\n";
+    return out;
 }

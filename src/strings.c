@@ -71,6 +71,23 @@ char *GetInsufficientArgumentsForRegMacErrorString()
     RETURN_STRING(errStr);
 }
 
+char *GetInsufficientArgumentsForDelMacErrorString()
+{
+    static const char errStr[] =
+    "Insufficient Arguments For Deleting A Macro!\n"
+    "Least no of arguments are 3\n"
+    "---\n"
+    COMMAND_DELETE_TRIMMED
+    " -m <macro-name> \n"
+    "---\n"
+    "example : "
+    COMMAND_DELETE_TRIMMED
+    " -m myMacro\n"
+    "Use -h for help";
+
+    RETURN_STRING(errStr);
+}
+
 char *GetInsufficientArgumentsForRegTempErrorString()
 {
     static const char errStr[] = 
@@ -91,11 +108,11 @@ char *GetInsufficientArgumentsForDelTempErrorString()
     "Insufficient Arguments For Deleting A Template!\n"
         "Least no of arguments are 3\n"
         "---\n"
-        COMMAND_DELETE
+        COMMAND_DELETE_TRIMMED
         " -t <template-name> \n"
         "---\n"
         "example : "
-        COMMAND_DELETE
+        COMMAND_DELETE_TRIMMED
         " -t myTemplate\n"
         "Use -h for help";
         RETURN_STRING(errStr);
@@ -193,12 +210,14 @@ char* GetStringHelp()
         "  cfgen <command> [sub-command] [options]\n"
         "\n"
         "Commands:\n"
-        "  -h                                              Show this help message\n"
-        "  " COMMAND_GEN            " <name> <tpl>                            Generate a file using a template\n"
+        "  -h                                              Show This Help Message\n"
+        "  " COMMAND_GEN            "    <name> <tpl>                         Generate A File Using A Template\n"
         "  " COMMAND_REGISTER       " -m <macro-name> <value>                 To Register A Macro\n"
         "  " COMMAND_REGISTER       " -t <template-name> <template-file-name> To Register A Template For File generation\n"
-        "  " COMMAND_DELETE         " -m <macro-name>                         Delete a Macro\n"
-        "  " COMMAND_DELETE         " -t <template-name>                      Delete a Template\n"
+        "  " COMMAND_DELETE         " -m <macro-name>                         Delete A Macro\n"
+        "  " COMMAND_DELETE         " -t <template-name>                      Delete A Template\n"
+        "  " COMMAND_SHOW           " -t                                      Show Available Templates\n"
+        "  " COMMAND_SHOW           " -m                                      Show Available Macroes\n"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"

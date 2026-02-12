@@ -1,7 +1,7 @@
 #include <iostream>
 #include "globals.h"
 #include "commands.h"
-#include "TemplateRegister.h"
+#include "TemplateInterface.h"
 
 int main(int argc, char const *argv[])
 {
@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
                         std::cout << RegisterTemp(argc,argv);\
                     }
                 }
-                else if (subCmd == COMMAND_TEMPLATE_SUB){ // TODO : ADD FUNCTIONALITY...
+                else if (subCmd == COMMAND_MACRO_SUB){ // TODO : ADD FUNCTIONALITY...
                     if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){
                         std::cout << 
                         Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_MACR_REG) 
@@ -46,20 +46,47 @@ int main(int argc, char const *argv[])
                 }
             }
         }
-        else if (cmd == COMMAND_DELETE_TRIMMED){// Funtionality Complete ---
+        else if (cmd == COMMAND_DELETE_TRIMMED){
             if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(2)){
                 std::cout <<
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB);
-            }else{
+            }
+            else{
                 std::string subCmd = argv[2];
-                if (subCmd == COMMAND_TEMPLATE_SUB){
+                if (subCmd == COMMAND_TEMPLATE_SUB){ // Funtionality Complete ---
                     if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){
                         std::cout <<
                         Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL)
                         << std::endl;
-                    }else{
+                    }
+                    else{
                         std::cout << DeleteTemp(argc,argv);
                     }
+                }
+                else if (subCmd == COMMAND_MACRO_SUB){
+                    if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){
+                        std::cout <<
+                        Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_MACR_DEL)
+                        << std::endl;
+                    }
+                    else{
+                        std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 
+                    }
+                }
+            }
+        }
+        else if (cmd == COMMAND_SHOW_TRIMMED){
+            if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(2)){
+                    std::cout <<
+                    Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB);
+                }
+            else{
+                std::string subCmd = argv[2];
+                if (subCmd == COMMAND_TEMPLATE_SUB){
+                    std::cout << ShowAllTemplates();
+                }
+                else if (subCmd == COMMAND_MACRO_SUB){
+                    std::cout << "TODO : Implement This";
                 }
                 else{
                     std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 

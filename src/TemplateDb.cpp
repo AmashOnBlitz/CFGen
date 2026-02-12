@@ -145,3 +145,9 @@ bool templateExists(const std::string& name)
     }
     return false;
 }
+
+const std::vector<std::pair<std::string, std::string>>& getTemplateTable()
+{
+    loadTemplates();
+    return templateTable;
+}

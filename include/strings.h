@@ -5,6 +5,7 @@ char* GetUnknownSubCommandErrorString();
 char* GetNoArgumentsErrorString();
 char* GetInsufficientArgumentsForGenErrorString();
 char* GetInsufficientArgumentsForRegMacErrorString();
+char* GetInsufficientArgumentsForDelMacErrorString();
 char* GetInsufficientArgumentsForRegTempErrorString();
 char* GetInsufficientArgumentsForDelTempErrorString();
 char* GetInsufficientArgumentsNoSubCommandErrorString();
