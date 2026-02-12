@@ -8,25 +8,25 @@ namespace fs = std::filesystem;
 
 std::string RegisterTemp(int argc, char const* argv[])
 {
-    if (argc < 4){
+    if (argc < 5){
         return Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_REG);
     }
-    if (!fs::exists(argv[3])){
+    if (!fs::exists(argv[4])){
         return Constants::Instance().GetErrorString(ERRORCODE_FILE_DOES_NOT_EXIST_FOR_TEMP_REG);
     }
 
-    std::string out = addTemplate(argv[2],argv[3]);
+    std::string out = addTemplate(argv[3],argv[4]);
     if (out != ""){
         return out; 
     }
     
-    std::string str = Constants::Instance().GetString(STRINGCODE_TEMPLATE_REG_SUCCESSFULL) + "Template : " + argv[2] + "\nFormat By : " + argv[3];
+    std::string str = Constants::Instance().GetString(STRINGCODE_TEMPLATE_REG_SUCCESSFULL) + "Template : " + argv[3] + "\nFormat By : " + argv[4];
     return str;
 }
 
 std::string DeleteTemp(int argc, char const* argv[])
 {
-    if (argc < 3){
+    if (argc < 4){
         return Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL);
     }
 
@@ -35,6 +35,6 @@ std::string DeleteTemp(int argc, char const* argv[])
         return out; 
     }
     
-    std::string str = Constants::Instance().GetString(STRINGCODE_TEMPLATE_DEL_SUCCESSFULL) + "Template : " + argv[2] + " Removed!";
+    std::string str = Constants::Instance().GetString(STRINGCODE_TEMPLATE_DEL_SUCCESSFULL) + "Template : " + argv[3] + " Removed!";
     return str;
 }

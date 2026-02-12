@@ -16,7 +16,23 @@ static char* assignToCharBuff(const char* str)
 }
 #define RETURN_STRING(str) return assignToCharBuff(str)
 
-char* GetNoArgumentsErrorString()
+char *GetUnknownCommandErrorString()
+{
+    static const char errStr[] = 
+    "Unknown Argument Specified!\n"
+    "Use -h for Help\n";
+    RETURN_STRING(errStr);
+}
+
+char *GetUnknownSubCommandErrorString()
+{
+    static const char errStr[] = 
+    "Unknown Sub Command Specified!\n"
+    "Use -h for Help\n";
+    RETURN_STRING(errStr);
+}
+
+char *GetNoArgumentsErrorString()
 {
     static const char errStr[] =
         "No Arguments Specified\n"
@@ -45,11 +61,11 @@ char *GetInsufficientArgumentsForRegMacErrorString()
     static const char errStr[] =
         "Insufficient Arguments For Registering A Macro!\n"
         "Least no of arguments are 3\n"
-        COMMAND_REGISTER_MACRO
-        " <macro-name> <macro-value>\n"
+        COMMAND_REGISTER_TRIMMED
+        " -m <macro-name> <macro-value>\n"
         "example : "
-        COMMAND_REGISTER_MACRO
-        " Name Foo_Bar_Baz\n"
+        COMMAND_REGISTER_TRIMMED
+        " -m Name Foo_Bar_Baz\n"
         "Use -h for help";
 
     RETURN_STRING(errStr);
@@ -60,11 +76,11 @@ char *GetInsufficientArgumentsForRegTempErrorString()
     static const char errStr[] = 
     "Insufficient Arguments For Registering A Template!\n"
         "Least no of arguments are 3\n"
-        COMMAND_REGISTER_TEMPLATE
-        " <template-name> <template-file-name>\n"
+        COMMAND_REGISTER_TRIMMED
+        " -t <template-name> <template-file-name>\n"
         "example : "
-        COMMAND_REGISTER_TEMPLATE
-        " Temp1 tempheader.h\n"
+        COMMAND_REGISTER_TRIMMED
+        " -t Temp1 tempheader.h\n"
         "Use -h for help";
         RETURN_STRING(errStr);
 }
@@ -85,6 +101,16 @@ char *GetInsufficientArgumentsForDelTempErrorString()
         RETURN_STRING(errStr);
 }
 
+char *GetInsufficientArgumentsNoSubCommandErrorString()
+{
+    static const char errStr[] = 
+    "Insufficient Arguments For This Command!\n"
+    "This Command Requires A Sub Command\n"
+    "arguments : <command> [sub-command] [options]\n";
+    "Use -h for help\n";
+    RETURN_STRING(errStr);
+}
+
 char *GetFileDoesNotExitForTempGenErrorString()
 {
     static const char errStr[] = 
@@ -92,8 +118,8 @@ char *GetFileDoesNotExitForTempGenErrorString()
     "Template Registeration Failed ------ \n"
     "---\n"
     "Command Structure :\n"
-    COMMAND_REGISTER_TEMPLATE
-    " <template-name> <template-file-name>\n";
+    COMMAND_REGISTER_TRIMMED
+    " -t <template-name> <template-file-name>\n";
     RETURN_STRING(errStr);
 }
 
@@ -113,7 +139,7 @@ char *GetTempAlrExistsErrorString()
     RETURN_STRING(errStr);
 }
 
-char *GetTempNotFoundForDeletion()
+char *GetTempNotFoundForDeletionErrorString()
 {
     static const char errStr[] = 
     "ERROR : Template With This Name Does Not Exist!\n"
@@ -142,7 +168,7 @@ char *GetTemplateNotfoundErrorString()
     RETURN_STRING(errStr);
 }
 
-char *GetTemplateFileCannotBeWritten()
+char *GetTemplateFileCannotBeWrittenErrorString()
 {
     static const char errStr[] = 
     "ERROR : The Template Record File Cannot Be Opened!\n"
@@ -150,7 +176,7 @@ char *GetTemplateFileCannotBeWritten()
     RETURN_STRING(errStr);
 }
 
-char *GetCannotDeleteScriptFile()
+char *GetCannotDeleteScriptFileErrorString()
 {
     static const char errStr[] = 
     "ERROR : The Adjacent Template File Cannot Be Deleted!\n"
@@ -164,18 +190,18 @@ char* GetStringHelp()
         "CFGen - Code/File Generator\n"
         "---------------------------\n"
         "Usage:\n"
-        "  cfgen <command> [options]\n"
+        "  cfgen <command> [sub-command] [options]\n"
         "\n"
         "Commands:\n"
         "  -h                                              Show this help message\n"
-        "  " COMMAND_GEN " <name> <tpl>                            Generate a file using a template\n"
-        "  " COMMAND_REGISTER_MACRO " <macro-name> <value>                    To Register A Macro\n"
-        "  " COMMAND_REGISTER_TEMPLATE " <template-name> <template-file-name>    To Register A Template For File generation"
+        "  " COMMAND_GEN            " <name> <tpl>                            Generate a file using a template\n"
+        "  " COMMAND_REGISTER       " -m <macro-name> <value>                 To Register A Macro\n"
+        "  " COMMAND_REGISTER       " -t <template-name> <template-file-name> To Register A Template For File generation"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
-        "  cfgen " COMMAND_GEN " main.c mainTemplate\n"
-        "  cfgen " COMMAND_REGISTER_MACRO " Name Foo_Bar_Baz\n";
+        "  cfgen " COMMAND_GEN  " main.c mainTemplate\n"
+        "  cfgen " COMMAND_REGISTER " -m Name Foo_Bar_Baz\n";
 
     RETURN_STRING(helpStr);
 }

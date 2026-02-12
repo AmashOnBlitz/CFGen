@@ -1,19 +1,22 @@
 #pragma once
 
+char* GetUnknownCommandErrorString();
+char* GetUnknownSubCommandErrorString();
 char* GetNoArgumentsErrorString();
 char* GetInsufficientArgumentsForGenErrorString();
 char* GetInsufficientArgumentsForRegMacErrorString();
 char* GetInsufficientArgumentsForRegTempErrorString();
 char* GetInsufficientArgumentsForDelTempErrorString();
+char* GetInsufficientArgumentsNoSubCommandErrorString();
 char* GetFileDoesNotExitForTempGenErrorString();
 char* GetTempRegFileCannotBeCreatedErrorString();
 char* GetTempAlrExistsErrorString();
-char* GetTempNotFoundForDeletion();
+char* GetTempNotFoundForDeletionErrorString();
 char* GetCannotOpenProvidedFileErrorString();
 char* GetConnotCopyScriptFileErrorString();
 char* GetTemplateNotfoundErrorString();
-char* GetTemplateFileCannotBeWritten();
-char* GetCannotDeleteScriptFile();
+char* GetTemplateFileCannotBeWrittenErrorString();
+char* GetCannotDeleteScriptFileErrorString();
 char* GetStringHelp();
 char* GetStringRegTempSuccessfull();
 char* GetStringDelTempSuccessfull();

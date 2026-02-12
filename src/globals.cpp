@@ -1,6 +1,6 @@
 #include "globals.h"
 
-#define INTERNAL_ERR_STR_NOT_FOUND "INTERNAL ERROR : ERR String Not Found !"
+#define INTERNAL_ERR_STR_NOT_FOUND "INTERNAL ERROR : Error String Not Found !"
 
 [[nodiscard]]
 std::string fetchStrFrmChar(char* _c){
@@ -37,6 +37,12 @@ std::string Constants::GetErrorString(ERRORCODE errC)
     case ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL:{
         errString = fetchStrFrmChar(
             GetInsufficientArgumentsForDelTempErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB:{
+        errString = fetchStrFrmChar(
+            GetInsufficientArgumentsNoSubCommandErrorString()
         );
         break;
     }
@@ -78,7 +84,7 @@ std::string Constants::GetErrorString(ERRORCODE errC)
     }
     case ERRORCODE_CANNOT_WRITE_TEMPLATE_FILE:{
         errString = fetchStrFrmChar(
-            GetTemplateFileCannotBeWritten()
+            GetTemplateFileCannotBeWrittenErrorString()
         );
         break;
     }
@@ -90,13 +96,25 @@ std::string Constants::GetErrorString(ERRORCODE errC)
     }
     case ERRORCODE_CANNOT_DELETE_SCRIPT_FILE:{
         errString = fetchStrFrmChar(
-            GetCannotDeleteScriptFile()
+            GetCannotDeleteScriptFileErrorString()
         );
         break;
     }
     case ERRORCODE_TEMPLATE_NOT_FOUND_FOR_DEL:{
         errString = fetchStrFrmChar(
             GetTemplateNotfoundErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_UNKNOWN_CMD_SPECIFIED:{
+        errString = fetchStrFrmChar(
+            GetUnknownCommandErrorString()
+        );
+        break;
+    }
+    case ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED:{
+        errString = fetchStrFrmChar(
+            GetUnknownSubCommandErrorString()
         );
         break;
     }
