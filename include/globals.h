@@ -40,7 +40,8 @@ enum ERRORCODE : int {
 enum STRINGCODE : int{
     STRINGCODE_HELP                                 = 0x0201f,
     STRINGCODE_TEMPLATE_REG_SUCCESSFULL             = 0x0202f,
-    STRINGCODE_TEMPLATE_DEL_SUCCESSFULL             = 0x0203f
+    STRINGCODE_TEMPLATE_DEL_SUCCESSFULL             = 0x0203f,
+    STRINGCODR_TEMP_FILE_DONT_EXIST_YET             = 0x0204f
 };
 
 class Constants

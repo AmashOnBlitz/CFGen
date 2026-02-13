@@ -21,3 +21,4 @@ char* GetCannotDeleteScriptFileErrorString();
 char* GetStringHelp();
 char* GetStringRegTempSuccessfull();
 char* GetStringDelTempSuccessfull();
+char* GetStringTempRecFileDontExistYet();

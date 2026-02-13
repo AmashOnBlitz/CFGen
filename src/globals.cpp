@@ -132,6 +132,7 @@ std::string Constants::GetErrorString(ERRORCODE errC)
 std::string Constants::GetString(STRINGCODE strC)
 {
     std::string str = INTERNAL_ERR_STR_NOT_FOUND;
+    str = "\n String Code : " + std::to_string(static_cast<int>(strC));
 
     switch (strC)
     {
@@ -145,6 +146,10 @@ std::string Constants::GetString(STRINGCODE strC)
     }
     case STRINGCODE_TEMPLATE_DEL_SUCCESSFULL:{
         str = fetchStrFrmChar(GetStringDelTempSuccessfull());
+        break;
+    }
+    case STRINGCODR_TEMP_FILE_DONT_EXIST_YET:{
+        str = fetchStrFrmChar(GetStringTempRecFileDontExistYet());
         break;
     }
     default:

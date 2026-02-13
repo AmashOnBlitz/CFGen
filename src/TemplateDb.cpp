@@ -59,6 +59,30 @@ std::string addTemplate(std::string name, std::string value)
         );
     }
     
+    bool isNewFile = !fs::exists(tmpfile);
+    if (isNewFile) {
+        std::ofstream headerFile(tmpfile, std::ios::out);
+        if (!headerFile.is_open()) {
+            return Constants::Instance().GetErrorString(
+                ERRORCODE_CANNOT_CREATE_TEMPLATE_FILE
+            );
+        }
+
+        auto now = std::chrono::system_clock::now();
+        std::time_t t = std::chrono::system_clock::to_time_t(now);
+
+        headerFile << "# Created-On: "
+                << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S")
+                << "\n";
+        headerFile << "# File-Format:\n";
+        headerFile << "# <template_name>" << TMP_VAL_DELIM
+                << "<script_filename>\n";
+        headerFile << "===================================================================\n";
+        headerFile << "\n";    
+
+        headerFile.close();
+    }
+
     std::fstream file;
     file.open(tmpfile, std::ios::out | std::ios::app);
     if (!file.is_open()) {
@@ -125,6 +149,8 @@ void loadTemplates()
 
     while (std::getline(file, line))
     {
+        if (line.empty() || line[0] == '#')
+        continue;
         size_t pos = line.find(TMP_VAL_DELIM);
         if (pos == std::string::npos)
             continue; 
@@ -151,3 +177,10 @@ const std::vector<std::pair<std::string, std::string>>& getTemplateTable()
     loadTemplates();
     return templateTable;
 }
+
+const std::string getTemplateRecordFileDir(){
+    fs::path dir = getAppDataDir() / TMP_FILE_NAME;
+    if (!fs::exists(dir))
+    return Constants::Instance().GetString(STRINGCODR_TEMP_FILE_DONT_EXIST_YET); 
+    return dir.string();
+} 

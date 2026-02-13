@@ -69,3 +69,7 @@ std::string ShowAllTemplates()
     out += "----------------------------------------------------\n";
     return out;
 }
+
+const std::string GetTemplateRecordLocation(){
+    return getTemplateRecordFileDir();
+}

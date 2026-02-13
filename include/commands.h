@@ -12,5 +12,6 @@
 #define COMMAND_DELETE_TRIMMED      "-del"
 #define COMMAND_SHOW_TRIMMED        "-show"
 
-#define COMMAND_TEMPLATE_SUB  "-t"    
-#define COMMAND_MACRO_SUB     "-m"
+#define COMMAND_TEMPLATE_SUB    "-t"    
+#define COMMAND_MACRO_SUB       "-m"
+#define COMMAND_TEMP_RC_DIR_SUB "-trdir"  

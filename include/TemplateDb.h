@@ -5,3 +5,4 @@
 std::string addTemplate(std::string name, std::string value);
 std::string removeTemplate(const std::string& name);
 const std::vector<std::pair<std::string, std::string>>& getTemplateTable();
+const std::string getTemplateRecordFileDir();

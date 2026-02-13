@@ -218,6 +218,7 @@ char* GetStringHelp()
         "  " COMMAND_DELETE         " -t <template-name>                      Delete A Template\n"
         "  " COMMAND_SHOW           " -t                                      Show Available Templates\n"
         "  " COMMAND_SHOW           " -m                                      Show Available Macroes\n"
+        "  " COMMAND_SHOW           " -trdir                                  Show Template Records File Dir\n"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
@@ -238,5 +239,13 @@ char *GetStringRegTempSuccessfull()
 char *GetStringDelTempSuccessfull()
 {
     static const char str[] = "Template Deletion Succesfull ------\n";
+    RETURN_STRING(str);
+}
+
+char *GetStringTempRecFileDontExistYet()
+{
+    static const char str[] = 
+    "Template Record File Does Not Exist Yet\n"
+    "Try Adding Some Templates! ---";
     RETURN_STRING(str);
 }

@@ -88,6 +88,9 @@ int main(int argc, char const *argv[])
                 else if (subCmd == COMMAND_MACRO_SUB){
                     std::cout << "TODO : Implement This";
                 }
+                else if (subCmd == COMMAND_TEMP_RC_DIR_SUB){
+                    std::cout << GetTemplateRecordLocation();
+                }
                 else{
                     std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 
                 }
