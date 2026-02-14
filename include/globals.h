@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "strings.h"
+#include <unordered_map>
 
 constexpr int NO_OF_ARGUMENTS_MINUS_FIRST(int argc)
 {
@@ -47,7 +48,10 @@ enum STRINGCODE : int{
 class Constants
 {
 private:
-
+std::unordered_map<ERRORCODE, std::string> errorMap;
+std::unordered_map<STRINGCODE, std::string> stringMap;
+void initializeErrorStrings();
+void initializeGeneralStrings();
 public:
 [[nodiscard]]
 std::string GetErrorString(ERRORCODE errC);
