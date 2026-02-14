@@ -113,6 +113,23 @@ void Constants::initializeErrorStrings()
     errorMap[ERRORCODE_TEMPLATE_NOT_FOUND_FOR_DEL] = 
         "ERROR : Template With This Name Does Not Exist!\n"
         "Removal Aborted ---\n";
+
+    errorMap[ERRORCODE_CANNOT_CREATE_MACRO_FILE] = 
+        "ERROR : Cannot Create Macro Record File!\n"
+        "Please Check The Permissions Or Reinstall The App";
+
+    errorMap[ERRORCODE_MARCO_ALR_EXISTS] =     
+        "ERROR : Macro With This Name Already Exists!\n"
+        "Please Use A Unique Name Or Remove This Macro!";
+    
+    errorMap[ERRORCODE_MACRO_NOT_FOUND_FOR_DEL] = 
+        "ERROR : Macro With This Name Does Not Exist!\n"
+        "Removal Aborted ---\n";
+
+    errorMap[ERRORCODE_CANNOT_WRITE_MACRO_FILE] = 
+        "ERROR : The Macro Record File Cannot Be Opened!\n"
+        "Checking Permissions Or Reinstalling The App May Help\n";
+
 }
 
 void Constants::initializeGeneralStrings()
@@ -140,12 +157,15 @@ void Constants::initializeGeneralStrings()
         "  cfgen " COMMAND_REGISTER " -m Name Foo_Bar_Baz\n"
         "  cfgen " COMMAND_DELETE   " -m Name\n"
         "  cfgen " COMMAND_DELETE   " -t Temp1\n";
-
+        
     stringMap[STRINGCODE_TEMPLATE_REG_SUCCESSFULL] = "Template Registeration Succesfull ------\n";
     stringMap[STRINGCODE_TEMPLATE_DEL_SUCCESSFULL] = "Template Deletion Succesfull ------\n";
     stringMap[STRINGCODR_TEMP_FILE_DONT_EXIST_YET] = 
         "Template Record File Does Not Exist Yet\n"
         "Try Adding Some Templates! ---";
+        stringMap[STRINGCODR_MACR_FILE_DONT_EXIST_YET] = 
+        "Macro Record File Does Not Exist Yet\n"
+        "Try Adding Some Macro! ---";
 }
 
 std::string Constants::GetErrorString(ERRORCODE errC)

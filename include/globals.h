@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "strings.h"
 #include <unordered_map>
 
 constexpr int NO_OF_ARGUMENTS_MINUS_FIRST(int argc)
@@ -34,7 +33,11 @@ enum ERRORCODE : int {
     ERRORCODE_TEMPLATE_NOT_FOUND_FOR_DEL            = 0x0111f,
     ERRORCODE_TEMPLATE_NOT_FOUND                    = 0x0112f,
     ERRORCODE_CANNOT_WRITE_TEMPLATE_FILE            = 0x0113f,
-    ERRORCODE_CANNOT_DELETE_SCRIPT_FILE             = 0x0114f
+    ERRORCODE_CANNOT_DELETE_SCRIPT_FILE             = 0x0114f,
+    ERRORCODE_CANNOT_CREATE_MACRO_FILE              = 0x0115f,
+    ERRORCODE_MARCO_ALR_EXISTS                      = 0x0116f,
+    ERRORCODE_MACRO_NOT_FOUND_FOR_DEL               = 0x0117f,
+    ERRORCODE_CANNOT_WRITE_MACRO_FILE               = 0x0118f
 };
 
 // Codes 0x0200f to 0x0400f Reserved For Error Strings
@@ -42,7 +45,8 @@ enum STRINGCODE : int{
     STRINGCODE_HELP                                 = 0x0201f,
     STRINGCODE_TEMPLATE_REG_SUCCESSFULL             = 0x0202f,
     STRINGCODE_TEMPLATE_DEL_SUCCESSFULL             = 0x0203f,
-    STRINGCODR_TEMP_FILE_DONT_EXIST_YET             = 0x0204f
+    STRINGCODR_TEMP_FILE_DONT_EXIST_YET             = 0x0204f,
+    STRINGCODR_MACR_FILE_DONT_EXIST_YET             = 0x0205f
 };
 
 class Constants
