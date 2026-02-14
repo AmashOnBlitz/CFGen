@@ -15,3 +15,4 @@
 #define COMMAND_TEMPLATE_SUB    "-t"    
 #define COMMAND_MACRO_SUB       "-m"
 #define COMMAND_TEMP_RC_DIR_SUB "-trdir"  
+#define COMMAND_MACR_RC_DIR_SUB "-mrdir"  

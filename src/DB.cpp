@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstring>
 #include <filesystem>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -98,7 +99,7 @@ std::string addTemplate(std::string name, std::string value)
         auto now = std::chrono::system_clock::now();
         std::time_t t = std::chrono::system_clock::to_time_t(now);
         headerFile << "===================================================================\n";
-        headerFile << "Template Record File ---";
+        headerFile << "Template Record File \n";
         headerFile << "# Created-On: "
                 << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S")
                 << "\n";
@@ -227,7 +228,7 @@ std::string addMacro(std::string name, std::string value){
         auto now = std::chrono::system_clock::now();
         std::time_t t = std::chrono::system_clock::to_time_t(now);
         headerFile << "===================================================================\n";
-        headerFile << "Macro Record File ---";
+        headerFile << "Macro Record File \n";
         headerFile << "# Created-On: "
                 << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S")
                 << "\n";
@@ -300,8 +301,10 @@ bool macroExists(const std::string& name){
 
 const std::string getMacroRecordFileDir(){
     fs::path dir = getAppDataDir() / MACR_FILE_NAME;
-    if (!fs::exists(dir))
-    return Constants::Instance().GetString(STRINGCODR_MACR_FILE_DONT_EXIST_YET); 
+    if (!fs::exists(dir)){
+        return Constants::Instance().GetString(STRINGCODR_MACR_FILE_DONT_EXIST_YET); 
+    }
+
     return dir.string();
 } 
 

@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "commands.h"
 #include "TemplateInterface.h"
+#include "MacroInterface.h"
 
 int main(int argc, char const *argv[])
 {
@@ -23,37 +24,39 @@ int main(int argc, char const *argv[])
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB);
             }else{
                 std::string subCmd = argv[2];
-                if (subCmd == COMMAND_TEMPLATE_SUB){ // Funtionality Complete ---
+                if (subCmd == COMMAND_TEMPLATE_SUB){ 
                     if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){
                         std::cout << 
                         Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_REG) 
                         << std::endl;
                     }
                     else{
-                        std::cout << RegisterTemp(argc,argv);\
+                        std::cout << RegisterTemp(argc,argv);
                     }
                 }
-                else if (subCmd == COMMAND_MACRO_SUB){ // TODO : ADD FUNCTIONALITY...
+                else if (subCmd == COMMAND_MACRO_SUB){
                     if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){
                         std::cout << 
                         Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_MACR_REG) 
                         << std::endl;
                     }
-                    else{}
+                    else{
+                        std::cout << RegisterMacr(argc,argv);
+                    }
                 }
                 else{
                     std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 
                 }
             }
         }
-        else if (cmd == COMMAND_DELETE_TRIMMED){
+        else if (cmd == COMMAND_DELETE_TRIMMED){ // Funtionality Complete ---
             if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(2)){
                 std::cout <<
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB);
             }
             else{
                 std::string subCmd = argv[2];
-                if (subCmd == COMMAND_TEMPLATE_SUB){ // Funtionality Complete ---
+                if (subCmd == COMMAND_TEMPLATE_SUB){ 
                     if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){
                         std::cout <<
                         Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_TEMP_DEL)
@@ -68,14 +71,16 @@ int main(int argc, char const *argv[])
                         std::cout <<
                         Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_MACR_DEL)
                         << std::endl;
+                    }else{
+                        std::cout << DeleteMacr(argc,argv);
                     }
-                    else{
-                        std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 
-                    }
+                }
+                else{
+                    std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 
                 }
             }
         }
-        else if (cmd == COMMAND_SHOW_TRIMMED){
+        else if (cmd == COMMAND_SHOW_TRIMMED){ // Funtionality Complete ---
             if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(2)){
                     std::cout <<
                     Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB);
@@ -86,22 +91,27 @@ int main(int argc, char const *argv[])
                     std::cout << ShowAllTemplates();
                 }
                 else if (subCmd == COMMAND_MACRO_SUB){
-                    std::cout << "TODO : Implement This";
+                    std::cout << ShowAllMacros();
                 }
                 else if (subCmd == COMMAND_TEMP_RC_DIR_SUB){
                     std::cout << GetTemplateRecordLocation();
+                }
+                else if (subCmd == COMMAND_MACR_RC_DIR_SUB){
+                    std::cout << GetMacroRecordLocation();
                 }
                 else{
                     std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_SUB_CMD_SPECIFIED); 
                 }
             }
         }
-        else if(cmd == COMMAND_GEN_TRIMMED){ // TODO : ADD FUNCTIONALITY...
+        else if(cmd == COMMAND_GEN_TRIMMED){ // TODO : Functionality Yet To Be Implemented...
             if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){ 
                 std::cout << 
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_GEN) 
                 << std::endl;
                 return 0;
+            }else{
+                std::cout << "TODO: Yet To Be Implemented!" << std::endl;
             }
         }
         else {

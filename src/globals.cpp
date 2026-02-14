@@ -150,6 +150,7 @@ void Constants::initializeGeneralStrings()
         "  " COMMAND_SHOW           " -t                                      Show Available Templates\n"
         "  " COMMAND_SHOW           " -m                                      Show Available Macroes\n"
         "  " COMMAND_SHOW           " -trdir                                  Show Template Records File Dir\n"
+        "  " COMMAND_SHOW           " -mrdir                                  Show Macro Records File Dir\n"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
@@ -163,7 +164,9 @@ void Constants::initializeGeneralStrings()
     stringMap[STRINGCODR_TEMP_FILE_DONT_EXIST_YET] = 
         "Template Record File Does Not Exist Yet\n"
         "Try Adding Some Templates! ---";
-        stringMap[STRINGCODR_MACR_FILE_DONT_EXIST_YET] = 
+    stringMap[STRINGCODE_MACR_REG_SUCCESSFULL] = "Macro Registeration Succesfull ------\n"; 
+    stringMap[STRINGCODE_MACR_DEL_SUCCESSFULL] = "Macro Deletion Succesfull ------\n";
+    stringMap[STRINGCODR_MACR_FILE_DONT_EXIST_YET] = 
         "Macro Record File Does Not Exist Yet\n"
         "Try Adding Some Macro! ---";
 }
