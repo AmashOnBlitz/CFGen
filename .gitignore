@@ -38,3 +38,9 @@ Thumbs.db
 # =========================
 
 *gitignore
+
+# =========================
+# Project Maintenance
+# =========================
+BuildCollection\
+*.py
