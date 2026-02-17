@@ -129,7 +129,7 @@ g++ --version   # should say GCC 10+ or Clang 12+
 
 ```bat
 git clone https://github.com/AmashOnBlitz/cfgen.git
-cd cfgen
+cd cfgen/scripts/
 build.bat
 ```
 
@@ -141,7 +141,7 @@ To use `cfgen` from anywhere, add the `build\` directory to your `PATH` (see Env
 
 ```bash
 git clone https://github.com/AmashOnBlitz/cfgen.git
-cd cfgen
+cd cfgen/scripts/
 chmod +x build.sh
 ./build.sh
 ```
@@ -157,6 +157,7 @@ The executable will be at `build/cfgen`.
 ### macOS
 
 ```bash
+cd cfgen/
 chmod +x scripts/build_mac.sh
 ./scripts/build_mac.sh
 ```
