@@ -790,10 +790,8 @@ To build and test locally:
 
 ---
 
-## License & Final Notes
-
-See `LICENSE` for full terms.
+## Final Notes
 
 CFGen was written by a student who was tired of typing the same header comment block for the fifth time this week. If it saves you that same annoyance, that's exactly what it's for.
-
+And yes if you are wondering, **I took help from AI to build this Readme but not with the code** 
 If something's broken, missing, or confusing — open an issue. Feedback from actual use is more useful than anything else.
