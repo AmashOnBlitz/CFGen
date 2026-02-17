@@ -141,18 +141,18 @@ To use `cfgen` from anywhere, add the `build\` directory to your `PATH` (see Env
 
 ```bash
 git clone https://github.com/AmashOnBlitz/cfgen.git
-cd cfgen/scripts/
-chmod +x build_linux.sh
-./build_linux.sh
+cd cfgen/
+chmod +x scripts/build_linux.sh
+./scripts/build_linux.sh
 ```
 
 The executable will be at `build/cfgen`.
 
 > **Windows line endings issue:** If you cloned this repo on Windows and are now building on Linux, or if your editor saved the build script with Windows-style line endings (`\r\n`), you'll get an error like `env: bash\r: No such file or directory` when running the script. The `\r` is invisible but breaks the shebang line. Fix it with:
 > ```bash
-> sed -i 's/\r$//' build_linux.sh
+> sed -i 's/\r$//' scripts/build_linux.sh
 > ```
-> Then run `./build_linux.sh` again. You only need to do this once per clone.
+> Then run `./scripts/build_linux.sh` again. You only need to do this once per clone.
 
 ### macOS
 
