@@ -4,6 +4,7 @@
 #include "TemplateInterface.h"
 #include "MacroInterface.h"
 #include "generator.h"
+#include "version.h"
 
 int main(int argc, char const *argv[])
 {
@@ -105,7 +106,7 @@ int main(int argc, char const *argv[])
                 }
             }
         }
-        else if(cmd == COMMAND_GEN_TRIMMED){ // TODO : Functionality Yet To Be Implemented...
+        else if(cmd == COMMAND_GEN_TRIMMED){ // Funtionality Complete ---
             if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(3)){ 
                 std::cout << 
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_FOR_GEN) 
@@ -114,6 +115,9 @@ int main(int argc, char const *argv[])
             }else{
                 std::cout << GenFile(argc,argv);
             }
+        }
+        else if (cmd == COMMAND_VERSION_TRIMMED){
+            std::cout <<  GetVersionInfo();
         }
         else {
             std::cout << Constants::Instance().GetErrorString(ERRORCODE_UNKNOWN_CMD_SPECIFIED);

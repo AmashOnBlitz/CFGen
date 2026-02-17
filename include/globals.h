@@ -43,7 +43,11 @@ enum ERRORCODE : int {
     ERRORCODE_MACRO_UNMATCHED_BRACES                = 0x0130f,
     ERRORCODE_INVALID_TRANSFORM_SYNTAX              = 0x0131f,
     ERRORCODE_FAILED_TO_GEN_FILE                    = 0x0132f,
-    ERRORCODE_MACRO_NESTING_TOO_DEEP                = 0x0133f
+    ERRORCODE_MACRO_NESTING_TOO_DEEP                = 0x0133f,
+    ERRORCODE_FILE_ALR_EXISTS                       = 0x0134f,
+    ERRORCODE_FAILED_TO_FETCH_REMOTE_VERSION        = 0x0135f,
+    ERRORCODE_REMOTE_VERSION_EMPTY                  = 0x0136f,
+    ERRORCODE_VERSION_CHECK_NOT_AVAILABLE           = 0x0137f
 };
 
 // Codes 0x0200f to 0x0400f Reserved For Error Strings
@@ -56,7 +60,14 @@ enum STRINGCODE : int{
     STRINGCODE_MACR_DEL_SUCCESSFULL                 = 0x0206f,
     STRINGCODR_MACR_FILE_DONT_EXIST_YET             = 0x0207f,
     STRINGCODE_MACR_NOT_REGISTERED                  = 0x0208f,
-    STRINGCODE_FILE_GENERATED                       = 0x0209f
+    STRINGCODE_FILE_GENERATED                       = 0x0209f,
+    STRINGCODE_VERSION_HEADER                       = 0x0210f,
+    STRINGCODE_VERSION_UP_TO_DATE                   = 0x0211f,
+    STRINGCODE_VERSION_OUTDATED                     = 0x0212f,
+    STRINGCODE_VERSION_CHECKING                     = 0x0213f,
+    STRINGCODE_VERSION_LOCAL                        = 0x0214f,
+    STRINGCODE_VERSION_REMOTE                       = 0x0215f,
+    STRINGCODE_VERSION_BETA                         = 0x0216f
 };
 
 class Constants

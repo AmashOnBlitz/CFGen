@@ -144,10 +144,27 @@ void Constants::initializeErrorStrings()
         "[Error] Macro braces are not balanced. Missing '${' or '}'.";
 
     errorMap[ERRORCODE_FAILED_TO_GEN_FILE] = 
-    "[Error] Failed to create output file: ";
+        "[Error] Failed to create output file: ";
 
     errorMap[ERRORCODE_MACRO_NESTING_TOO_DEEP] = 
-    "[Error] Macro nesting too deep (>";
+        "[Error] Macro nesting too deep (>";
+
+    errorMap[ERRORCODE_FILE_ALR_EXISTS] = 
+        "[Error] File Already Exists!\n"
+        "Please delete the file to generate a new one";
+
+    errorMap[ERRORCODE_FAILED_TO_FETCH_REMOTE_VERSION] =
+        "[Error] Failed to fetch latest version information.\n"
+        "Check your internet connection or GitHub availability.\n";
+
+    errorMap[ERRORCODE_REMOTE_VERSION_EMPTY] =
+        "[Error] Remote version data is invalid or empty.\n"
+        "The version file may be corrupted or unreachable.\n";
+
+    errorMap[ERRORCODE_VERSION_CHECK_NOT_AVAILABLE] =
+        "[Warning] Version check is currently unavailable.\n"
+        "Proceeding without update verification.\n";
+
 }
 
 void Constants::initializeGeneralStrings()
@@ -169,6 +186,7 @@ void Constants::initializeGeneralStrings()
         "  " COMMAND_SHOW           " -m                                      Show Available Macroes\n"
         "  " COMMAND_SHOW           " -trdir                                  Show Template Records File Dir\n"
         "  " COMMAND_SHOW           " -mrdir                                  Show Macro Records File Dir\n"
+        "  " COMMAND_VERSION        "                                         Shows Version\n"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
@@ -176,6 +194,7 @@ void Constants::initializeGeneralStrings()
         "  cfgen " COMMAND_REGISTER " -m Name Foo_Bar_Baz\n"
         "  cfgen " COMMAND_DELETE   " -m Name\n"
         "  cfgen " COMMAND_DELETE   " -t Temp1\n";
+        "  cfgen " COMMAND_VERSION  "\n";
         
     stringMap[STRINGCODE_TEMPLATE_REG_SUCCESSFULL] = "Template Registeration Succesfull ------\n";
     stringMap[STRINGCODE_TEMPLATE_DEL_SUCCESSFULL] = "Template Deletion Succesfull ------\n";
@@ -189,6 +208,31 @@ void Constants::initializeGeneralStrings()
         "Try Adding Some Macro! ---";
     stringMap[STRINGCODE_MACR_NOT_REGISTERED] = "[Warning] Macro Not Registered : ";
     stringMap[STRINGCODE_FILE_GENERATED] = "[OK] File generated: ";
+
+    stringMap[STRINGCODE_VERSION_HEADER] =
+        "CFGen - Code/File Generator\n"
+        "---------------------------\n";
+    stringMap[STRINGCODE_VERSION_CHECKING] =
+        "Checking for updates...\n";
+
+    stringMap[STRINGCODE_VERSION_LOCAL] =
+        "Installed Version : ";
+
+    stringMap[STRINGCODE_VERSION_REMOTE] =
+        "Latest Version    : ";
+
+    stringMap[STRINGCODE_VERSION_UP_TO_DATE] =
+        "Status            : You are using the latest version !\n";
+
+    stringMap[STRINGCODE_VERSION_OUTDATED] =
+        "Status            : Update available\n"
+        "Visit: https://github.com/AmashOnBlitz/CFGen\n";
+
+    stringMap[STRINGCODE_VERSION_BETA] =
+        "Status            : You are running a newer (beta/dev) version!\n"
+        "This version is ahead of the latest public release.\n";
+
+
 }
 
 std::string Constants::GetErrorString(ERRORCODE errC)

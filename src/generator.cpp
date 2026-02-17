@@ -365,6 +365,11 @@ std::string GenFile(int argc, const char* argv[])
     if (!std::filesystem::exists(ProcFilePath.parent_path()) && ProcFilePath.has_parent_path()){
         std::filesystem::create_directory(ProcFilePath.parent_path());
     }
+
+    if (std::filesystem::exists(ProcFilePath)){
+        return Constants::Instance().GetErrorString(ERRORCODE_FILE_ALR_EXISTS);
+    }
+
     std::ofstream out(outname);
     if (!out.is_open()) {
         return Constants::Instance().GetErrorString(ERRORCODE_FAILED_TO_GEN_FILE) + outname;
