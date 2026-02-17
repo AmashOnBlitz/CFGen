@@ -757,20 +757,6 @@ You can open these `.map` files in any text editor — they're plain text with a
 
 ---
 
-## Project Philosophy
-
-CFGen is built on a few convictions:
-
-**Correctness over convenience.** The macro resolver validates brace matching, checks transform syntax, enforces nesting limits, and reports errors with line numbers. It won't silently produce garbage output.
-
-**Transparency.** Templates are plain files you write. Macros are key-value pairs you define. The record files are human-readable text. Nothing is hidden in opaque binary formats or databases.
-
-**Minimal footprint.** CFGen doesn't install services, register itself with the OS, or require a runtime. It's a binary that reads a few text files and writes output. When it's done, it's done.
-
-**One job, done well.** This isn't a build system, a scaffolding tool, or a code generator framework. It generates files from templates with macro substitution. That's the whole thing.
-
----
-
 ## Contributing
 
 If you find a bug, have a feature idea, or want to add a transform — contributions are welcome.
