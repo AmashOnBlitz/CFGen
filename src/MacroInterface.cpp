@@ -66,3 +66,8 @@ const std::string GetMacroRecordLocation()
 {
     return getMacroRecordFileDir();
 }
+
+bool macroExists(std::string name)
+{
+    return qureyMacroExists(name);
+}

@@ -73,3 +73,12 @@ std::string ShowAllTemplates()
 const std::string GetTemplateRecordLocation(){
     return getTemplateRecordFileDir();
 }
+
+bool templateExits(std::string name)
+{
+    return queryTemplateExists(name);
+}
+
+std::string getTemplateScript(std::string name, bool& ok){
+    return readScript(name,ok);
+}

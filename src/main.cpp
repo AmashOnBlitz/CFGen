@@ -3,6 +3,7 @@
 #include "commands.h"
 #include "TemplateInterface.h"
 #include "MacroInterface.h"
+#include "generator.h"
 
 int main(int argc, char const *argv[])
 {
@@ -18,7 +19,7 @@ int main(int argc, char const *argv[])
             Constants::Instance().GetString(STRINGCODE_HELP)
             << std::endl;
         }
-        else if (cmd == COMMAND_REGISTER_TRIMMED){ 
+        else if (cmd == COMMAND_REGISTER_TRIMMED){ // Funtionality Complete ---
             if (argc < NO_OF_ARGUMENTS_MINUS_FIRST(2)){
                 std::cout <<
                 Constants::Instance().GetErrorString(ERRORCODE_INSUFFICIENT_ARGUMENTS_NO_SUB);
@@ -111,7 +112,7 @@ int main(int argc, char const *argv[])
                 << std::endl;
                 return 0;
             }else{
-                std::cout << "TODO: Yet To Be Implemented!" << std::endl;
+                std::cout << GenFile(argc,argv);
             }
         }
         else {

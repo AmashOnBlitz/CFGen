@@ -40,7 +40,6 @@ void loadTable(std::vector<std::pair<std::string,std::string>>& table, bool load
 #pragma region Template 
 
 std::vector<std::pair<std::string,std::string>> templateTable;
-bool templateExists(const std::string& name);
 void loadTemplates();
 
 std::string addTemplate(std::string name, std::string value)
@@ -53,7 +52,7 @@ std::string addTemplate(std::string name, std::string value)
     }
 
     loadTemplates();
-    if(templateExists(name)){
+    if(queryTemplateExists(name)){
         return Constants::Instance().GetErrorString(ERRORCODE_TEMPLATE_ALR_EXISTS);
     }
 
@@ -128,7 +127,7 @@ std::string removeTemplate(const std::string& name)
 {
     loadTemplates();
     
-    if (!templateExists(name)) {
+    if (!queryTemplateExists(name)) {
         return Constants::Instance().GetErrorString(ERRORCODE_TEMPLATE_NOT_FOUND_FOR_DEL);
     }
 
@@ -170,8 +169,9 @@ void loadTemplates()
     loadTable(templateTable,false);
 }
 
-bool templateExists(const std::string& name)
+bool queryTemplateExists(const std::string& name)
 {
+    loadTemplates();
     for (const auto& pair : templateTable)
     {
         if (pair.first == name)
@@ -191,8 +191,58 @@ const std::string getTemplateRecordFileDir(){
     if (!fs::exists(dir))
     return Constants::Instance().GetString(STRINGCODR_TEMP_FILE_DONT_EXIST_YET); 
     return dir.string();
-} 
+}
 
+std::string readScript(std::string name, bool& ok)
+{
+    loadTemplates();
+
+    std::string scriptFilename;
+    for (const auto& pair : templateTable)
+    {
+        if (pair.first == name)
+        {
+            scriptFilename = pair.second;
+            break;
+        }
+    }
+
+    if (scriptFilename.empty())
+    {
+        ok = false;
+        return Constants::Instance().GetErrorString(
+            ERRORCODE_TEMPLATE_NOT_FOUND
+        );
+    }
+
+    fs::path scriptPath =
+        getAppDataDir() / name / fs::path(scriptFilename);
+
+    if (!fs::exists(scriptPath) || !fs::is_regular_file(scriptPath))
+    {
+        ok = false;
+        return Constants::Instance().GetErrorString(
+            ERRORCODE_CANNOT_OPEN_PROVIDED_SCRIPT_FILE
+        );
+    }
+
+    std::ifstream file(scriptPath, std::ios::in);
+    if (!file.is_open())
+    {
+        ok = false;
+        return Constants::Instance().GetErrorString(
+            ERRORCODE_CANNOT_OPEN_PROVIDED_SCRIPT_FILE
+        );
+    }
+
+    std::string content(
+        (std::istreambuf_iterator<char>(file)),
+        std::istreambuf_iterator<char>()
+    );
+
+    ok = true;
+    return content;
+}
 
 #pragma endregion Template
 
@@ -200,8 +250,6 @@ const std::string getTemplateRecordFileDir(){
 
 std::vector<std::pair<std::string,std::string>> macroTable;
 void loadMacros();
-bool macroExists(const std::string& name);
-
 
 std::string addMacro(std::string name, std::string value){
     fs::path macrFile = getAppDataDir() / MACR_FILE_NAME;
@@ -212,7 +260,7 @@ std::string addMacro(std::string name, std::string value){
     }
 
     loadMacros();
-    if(macroExists(name)){
+    if(qureyMacroExists(name)){
         return Constants::Instance().GetErrorString(ERRORCODE_MARCO_ALR_EXISTS);
     }
 
@@ -256,7 +304,7 @@ std::string removeMacro(const std::string& name)
 {
     loadMacros();
 
-    if (!macroExists(name)) {
+    if (!qureyMacroExists(name)) {
         return Constants::Instance().GetErrorString(
             ERRORCODE_MACRO_NOT_FOUND_FOR_DEL
         );
@@ -290,7 +338,7 @@ void loadMacros(){
     loadTable(macroTable,true);
 }
 
-bool macroExists(const std::string& name){
+bool qureyMacroExists(const std::string& name){
     for (const auto& pair : macroTable)
     {
         if (pair.first == name)

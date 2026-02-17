@@ -20,10 +20,10 @@ set OBJ_DIR=%OUTPUT_DIR%\obj
 set EXE=%OUTPUT_DIR%\cfgen.exe
 
 :: Source files
-set SOURCES=src\main.cpp src\globals.cpp src\MacroInterface.cpp src\TemplateInterface.cpp src\DB.cpp
+set SOURCES=src\main.cpp src\globals.cpp src\generator.cpp src\MacroInterface.cpp src\TemplateInterface.cpp src\DB.cpp
 
 :: Compiler flags
-set CXXFLAGS=-std=c++20 -O0 -g -pipe -Iinclude
+set CXXFLAGS=-std=c++20 -O2 -g -fno-omit-frame-pointer -pipe -Iinclude
 
 :: Create output directories
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
@@ -137,7 +137,7 @@ if %COMPILE_NEEDED% equ 1 (
         echo %CYAN%------------------------------------------------------------%RESET%
         echo.
         echo %BLUE%[*]%RESET% Creating executable...
-        g++ %OBJ_DIR%\*.o -o %EXE%
+        g++ %OBJ_DIR%\*.o -g -o %EXE%
         if errorlevel 1 (
             echo %RED%[ERROR]%RESET% Linker failed
             exit /b 1

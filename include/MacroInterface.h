@@ -5,3 +5,4 @@ std::string RegisterMacr(int argc, char const *argv[]);
 std::string DeleteMacr(int argc, char const* argv[]);
 std::string ShowAllMacros();
 const std::string GetMacroRecordLocation();
+bool macroExists(std::string name);

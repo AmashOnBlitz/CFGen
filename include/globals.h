@@ -37,7 +37,13 @@ enum ERRORCODE : int {
     ERRORCODE_CANNOT_CREATE_MACRO_FILE              = 0x0115f,
     ERRORCODE_MARCO_ALR_EXISTS                      = 0x0116f,
     ERRORCODE_MACRO_NOT_FOUND_FOR_DEL               = 0x0117f,
-    ERRORCODE_CANNOT_WRITE_MACRO_FILE               = 0x0118f
+    ERRORCODE_CANNOT_WRITE_MACRO_FILE               = 0x0118f,
+    ERRORCODE_CANNOT_OPEN_PROVIDED_SCRIPT_FILE      = 0x0119f,
+    ERRORCODE_TRANSFORM_DEPTH_EXCEEDED              = 0x0120f,
+    ERRORCODE_MACRO_UNMATCHED_BRACES                = 0x0130f,
+    ERRORCODE_INVALID_TRANSFORM_SYNTAX              = 0x0131f,
+    ERRORCODE_FAILED_TO_GEN_FILE                    = 0x0132f,
+    ERRORCODE_MACRO_NESTING_TOO_DEEP                = 0x0133f
 };
 
 // Codes 0x0200f to 0x0400f Reserved For Error Strings
@@ -49,6 +55,8 @@ enum STRINGCODE : int{
     STRINGCODE_MACR_REG_SUCCESSFULL                 = 0x0205f,
     STRINGCODE_MACR_DEL_SUCCESSFULL                 = 0x0206f,
     STRINGCODR_MACR_FILE_DONT_EXIST_YET             = 0x0207f,
+    STRINGCODE_MACR_NOT_REGISTERED                  = 0x0208f,
+    STRINGCODE_FILE_GENERATED                       = 0x0209f
 };
 
 class Constants

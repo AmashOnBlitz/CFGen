@@ -130,6 +130,24 @@ void Constants::initializeErrorStrings()
         "ERROR : The Macro Record File Cannot Be Opened!\n"
         "Checking Permissions Or Reinstalling The App May Help\n";
 
+    errorMap[ERRORCODE_CANNOT_OPEN_PROVIDED_SCRIPT_FILE] = 
+    "ERROR : Cannot Read The Template Requested! \n"
+    "Try Checking Permissions or Rebuiding Template";
+
+    errorMap[ERRORCODE_TRANSFORM_DEPTH_EXCEEDED] =
+        "[Warning] Too many nested transforms. Only ONE transform is allowed.";
+
+    errorMap[ERRORCODE_INVALID_TRANSFORM_SYNTAX] =
+        "[Error] Invalid transform format. Use: ${transform:${macro}}";
+
+    errorMap[ERRORCODE_MACRO_UNMATCHED_BRACES] =
+        "[Error] Macro braces are not balanced. Missing '${' or '}'.";
+
+    errorMap[ERRORCODE_FAILED_TO_GEN_FILE] = 
+    "[Error] Failed to create output file: ";
+
+    errorMap[ERRORCODE_MACRO_NESTING_TOO_DEEP] = 
+    "[Error] Macro nesting too deep (>";
 }
 
 void Constants::initializeGeneralStrings()
@@ -142,7 +160,7 @@ void Constants::initializeGeneralStrings()
         "\n"
         "Commands:\n"
         "  -h                                              Show This Help Message\n"
-        "  " COMMAND_GEN            "    <name> <tpl>                         Generate A File Using A Template\n"
+        "  " COMMAND_GEN            "    <file-name> <tpl>                    Generate A File Using A Template\n"
         "  " COMMAND_REGISTER       " -m <macro-name> <value>                 To Register A Macro\n"
         "  " COMMAND_REGISTER       " -t <template-name> <template-file-name> To Register A Template For File generation\n"
         "  " COMMAND_DELETE         " -m <macro-name>                         Delete A Macro\n"
@@ -169,6 +187,8 @@ void Constants::initializeGeneralStrings()
     stringMap[STRINGCODR_MACR_FILE_DONT_EXIST_YET] = 
         "Macro Record File Does Not Exist Yet\n"
         "Try Adding Some Macro! ---";
+    stringMap[STRINGCODE_MACR_NOT_REGISTERED] = "[Warning] Macro Not Registered : ";
+    stringMap[STRINGCODE_FILE_GENERATED] = "[OK] File generated: ";
 }
 
 std::string Constants::GetErrorString(ERRORCODE errC)
