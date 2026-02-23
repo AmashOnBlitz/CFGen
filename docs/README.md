@@ -139,7 +139,20 @@ chmod +x scripts/build_linux.sh
 ```
 Executable: `build/cfgen`
 
+<<<<<<< HEAD
 **macOS:**
+=======
+The executable will be at `build/cfgen`.
+
+> **Windows line endings issue:** If you cloned this repo on Windows and are now building on Linux, or if your editor saved the build script with Windows-style line endings (`\r\n`), you'll get an error like `env: bash\r: No such file or directory` when running the script. The `\r` is invisible but breaks the shebang line. Fix it with:
+> ```bash
+> sed -i 's/\r$//' scripts/build_linux.sh
+> ```
+> Then run `./scripts/build_linux.sh` again. You only need to do this once per clone.
+
+### macOS
+
+>>>>>>> f4507c3 (Chore : Revised Readme)
 ```bash
 cd cfgen/
 chmod +x scripts/build_mac.sh
@@ -794,6 +807,10 @@ To build and test locally:
 
 CFGen was written by a student who was tired of typing the same header comment block for the fifth time this week. If it saves you that same annoyance, that's exactly what it's for.
 
+<<<<<<< HEAD
 And yes — **I took help from AI to write this README, but not with the code otherwise I could have have got someting TRASH!**
+=======
+And yes if you are wondering, **I took help from AI to build this Readme but not with the code** 
+>>>>>>> f4507c3 (Chore : Revised Readme)
 
 If something's broken, missing, or confusing — open an issue. Feedback from actual use is more useful than anything else.
