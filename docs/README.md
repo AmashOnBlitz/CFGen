@@ -129,7 +129,7 @@ g++ --version   # should say GCC 10+ or Clang 12+
 
 ```bat
 git clone https://github.com/AmashOnBlitz/cfgen.git
-cd cfgen
+cd cfgen/scripts/
 build.bat
 ```
 
@@ -141,22 +141,23 @@ To use `cfgen` from anywhere, add the `build\` directory to your `PATH` (see Env
 
 ```bash
 git clone https://github.com/AmashOnBlitz/cfgen.git
-cd cfgen
-chmod +x build.sh
-./build.sh
+cd cfgen/
+chmod +x scripts/build_linux.sh
+./scripts/build_linux.sh
 ```
 
 The executable will be at `build/cfgen`.
 
 > **Windows line endings issue:** If you cloned this repo on Windows and are now building on Linux, or if your editor saved the build script with Windows-style line endings (`\r\n`), you'll get an error like `env: bash\r: No such file or directory` when running the script. The `\r` is invisible but breaks the shebang line. Fix it with:
 > ```bash
-> sed -i 's/\r$//' build.sh
+> sed -i 's/\r$//' scripts/build_linux.sh
 > ```
-> Then run `./build.sh` again. You only need to do this once per clone.
+> Then run `./scripts/build_linux.sh` again. You only need to do this once per clone.
 
 ### macOS
 
 ```bash
+cd cfgen/
 chmod +x scripts/build_mac.sh
 ./scripts/build_mac.sh
 ```
@@ -756,20 +757,6 @@ You can open these `.map` files in any text editor — they're plain text with a
 
 ---
 
-## Project Philosophy
-
-CFGen is built on a few convictions:
-
-**Correctness over convenience.** The macro resolver validates brace matching, checks transform syntax, enforces nesting limits, and reports errors with line numbers. It won't silently produce garbage output.
-
-**Transparency.** Templates are plain files you write. Macros are key-value pairs you define. The record files are human-readable text. Nothing is hidden in opaque binary formats or databases.
-
-**Minimal footprint.** CFGen doesn't install services, register itself with the OS, or require a runtime. It's a binary that reads a few text files and writes output. When it's done, it's done.
-
-**One job, done well.** This isn't a build system, a scaffolding tool, or a code generator framework. It generates files from templates with macro substitution. That's the whole thing.
-
----
-
 ## Contributing
 
 If you find a bug, have a feature idea, or want to add a transform — contributions are welcome.
@@ -790,10 +777,10 @@ To build and test locally:
 
 ---
 
-## License & Final Notes
-
-See `LICENSE` for full terms.
+## Final Notes
 
 CFGen was written by a student who was tired of typing the same header comment block for the fifth time this week. If it saves you that same annoyance, that's exactly what it's for.
+
+And yes if you are wondering, **I took help from AI to build this Readme but not with the code** 
 
 If something's broken, missing, or confusing — open an issue. Feedback from actual use is more useful than anything else.
