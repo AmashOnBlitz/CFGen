@@ -2,9 +2,27 @@
 
 > **Stop copy-pasting boilerplate. Register a template once, generate it anywhere.**
 
-CFGen is a lightweight CLI tool that generates files from templates you define. You write the template once, register it, then call `cfgen -gen` to stamp out a fresh copy with all your macros, timestamps, filenames, and naming-convention transforms automatically filled in.
+CFGen is a lightweight CLI tool that generates files from templates you define. Write a template once, register it, then call `cfgen -gen` to stamp out a fresh copy — with macros, timestamps, filenames, and naming-convention transforms automatically filled in.
 
-It was built out of one simple frustration: every new C++ header, Python module, or config file starts with the same block of metadata that you always forget to update, or paste wrong, or forget to change from the last file. CFGen fixes that at the root.
+It was built out of one simple frustration: every new C++ header, Python module, or config file starts with the same block of metadata that you always forget to update, paste wrong, or forget to change from the last file. CFGen fixes that at the root.
+
+---
+
+## Table of Contents
+
+- [Why This Tool Exists](#why-this-tool-exists)
+- [Key Features](#key-features)
+- [How It Works](#how-it-works)
+- [Installation](#installation)
+- [Quick Start: Real-World Tutorial](#quick-start-real-world-tutorial)
+- [Command Reference](#command-reference)
+- [Template System](#template-system)
+- [Built-in Default Macros](#built-in-default-macros)
+- [Runtime Variables](#runtime-variables)
+- [Template Transforms](#template-transforms)
+- [Advanced Tips](#advanced-tips)
+- [Common Pitfalls & Debugging](#common-pitfalls--debugging)
+- [Comparison / Alternatives](#comparison--alternatives)
 
 ---
 
@@ -12,31 +30,29 @@ It was built out of one simple frustration: every new C++ header, Python module,
 
 File templates already exist in IDEs, snippets managers, and shell scripts. None of them work cleanly across tools, terminals, and projects.
 
-- **IDE snippets** are locked to one editor. Switch tools, lose your templates.
-- **Shell scripts** work, but writing a new one for each template is tedious and they don't compose well.
-- **Cookiecutter / Yeoman** are overkill. They require Python environments, config files, prompts, and learning a framework. You just want to generate `main.cpp`.
+**IDE snippets** are locked to one editor. Switch tools, lose your templates. **Shell scripts** work, but writing a new one for each template is tedious and they don't compose well. **Cookiecutter / Yeoman** are overkill — they require Python environments, config files, prompts, and learning a framework just to stamp out a header.
 
-CFGen is a single static binary. You register a template file. You optionally define named macros (like `author` or `company`). Then you generate. No runtime, no config, no YAML soup.
-
-The template system resolves macros at generation time, applies transforms (uppercase, snake_case, slug, etc.), and handles nested transforms correctly — all without a scripting language.
+CFGen is a single static binary. Register a template. Optionally define named macros. Generate. No runtime, no config, no YAML soup.
 
 ---
 
 ## Key Features
 
 - **Template registry** — Register any file as a named template. CFGen copies and stores it internally so you can call it from anywhere.
-- **Macro system** — Define named key-value pairs (`author`, `company`, `project`, etc.) that get substituted into any template on generation.
-- **Built-in default macros** — `${filename}`, `${date}`, `${year}`, `${iso_date}`, `${cwd}`, and more are resolved automatically without you defining anything.
-- **Transform functions** — Apply `upper`, `lower`, `snake`, `camel`, `pascal`, `title`, `slug`, `trim`, and `reverse` directly inside the template syntax.
-- **Chainable / nested transforms** — You can nest one transform inside another: `${upper:${snake:${classname}}}` works exactly as you'd expect.
+- **Macro system** — Define named key-value pairs (`author`, `company`, etc.) that get substituted into any template on generation.
+- **Runtime variables** — Declare `@register` variables inside a template and pass values with `-p<...>` at generation time. No need to update the macro registry between files.
+- **Built-in default macros** — `${filename}`, `${date}`, `${year}`, `${iso_date}`, `${cwd}`, and more resolve automatically without any setup.
+- **Transform functions** — Apply `upper`, `lower`, `snake`, `camel`, `pascal`, `title`, `slug`, `trim`, and `reverse` directly in template syntax.
+- **Chainable / nested transforms** — `${upper:${snake:${classname}}}` works exactly as you'd expect.
+- **Version checker** — `cfgen -version` shows your installed version and checks GitHub for updates.
 - **Zero runtime dependencies** — The compiled binary is standalone. No interpreters, no package managers at runtime.
-- **Cross-platform** — Works on Windows, Linux, and macOS. Platform-specific paths (`%APPDATA%`, `~/.config`) are handled automatically.
+- **Cross-platform** — Works on Windows, Linux, and macOS.
 
 ---
 
 ## How It Works
 
-The mental model is simple: CFGen is a two-registry tool with a template engine.
+CFGen is a two-registry tool with a template engine.
 
 ```
  [ Template Registry ]          [ Macro Registry ]
@@ -46,8 +62,9 @@ The mental model is simple: CFGen is a two-registry tool with a template engine.
                   ▼
            [ Generator ]
        reads template content
+       processes @register directives
        scans for ${...} tokens
-       resolves macros + transforms
+       resolves macros + runtime vars + transforms
        writes output file
 ```
 
@@ -55,17 +72,19 @@ When you run `cfgen -gen output.h MyTemplate`:
 
 1. CFGen looks up `MyTemplate` in the template registry.
 2. It reads the stored template file.
-3. It scans the content for `${...}` expressions.
-4. Each expression is resolved — first against built-in macros, then your registered macros.
-5. Any transform (`upper:`, `snake:`, etc.) is applied to the resolved value.
-6. The processed content is written to `output.h`.
+3. It strips and processes any `@register` directives, binding runtime values from `-p<...>`.
+4. It scans the content for `${...}` expressions.
+5. Each expression resolves — first against built-in macros, then runtime variables, then registered macros.
+6. Any transform (`upper:`, `snake:`, etc.) is applied to the resolved value.
+7. The processed content is written to the output file.
 
 Templates and macros are stored in your system's standard app data directory:
-- **Windows:** `%APPDATA%\CFGen\`
-- **Linux:** `~/.config/CFGen/`
-- **macOS:** `~/Library/Application Support/CFGen/`
 
-You never have to touch these directories manually.
+| Platform | Location |
+|---|---|
+| Windows | `%APPDATA%\CFGen\` |
+| Linux | `~/.config/CFGen/` |
+| macOS | `~/Library/Application Support/CFGen/` |
 
 ---
 
@@ -73,7 +92,7 @@ You never have to touch these directories manually.
 
 ### Pre-built Binaries (Recommended)
 
-If you just want to use CFGen without building from source, grab the latest binary from the [Releases page](https://github.com/AmashOnBlitz/cfgen/releases).
+Grab the latest binary from the [Releases page](https://github.com/AmashOnBlitz/cfgen/releases).
 
 | Platform | File |
 |---|---|
@@ -81,128 +100,60 @@ If you just want to use CFGen without building from source, grab the latest bina
 | Linux | `cfgen-linux` |
 | macOS | `cfgen-macos` |
 
-Download the binary for your platform, rename it to `cfgen` (or `cfgen.exe` on Windows), and put it somewhere on your `PATH`. That's it — no compiler needed.
+Download, rename to `cfgen` (or `cfgen.exe` on Windows), and put it on your `PATH`. No compiler needed.
 
-On Linux/macOS you'll need to mark it executable first:
+On Linux/macOS, mark it executable first:
 
 ```bash
 chmod +x cfgen
 ```
 
-**macOS only — Gatekeeper quarantine:** macOS flags binaries downloaded from the internet and blocks them from running, even after `chmod +x`. You'll know you've hit this if you see:
-
-```
-zsh: operation not permitted: ./cfgen
-```
-
-Remove the quarantine flag with:
+**macOS — Gatekeeper quarantine:** macOS flags binaries downloaded from the internet. If you see `zsh: operation not permitted: ./cfgen`, remove the quarantine flag:
 
 ```bash
 xattr -d com.apple.quarantine ./cfgen
-```
-
-If that doesn't fully work (some Apple Silicon Macs are stricter), clear all extended attributes:
-
-```bash
+# If that doesn't work (some Apple Silicon Macs are stricter):
 xattr -c ./cfgen
 ```
 
-After either command, `./cfgen` will run normally. You only need to do this once — the flag doesn't come back.
-
-> **Note:** `cfgen` (without `./`) will still say `command not found` until you add the binary's directory to your `PATH`. That's a separate step — see Environment Variables below.
-
----
+You only need to do this once.
 
 ### Building from Source
 
-If you'd rather build it yourself, you need a C++20-capable compiler:
-- **Windows:** GCC via [MSYS2](https://www.msys2.org/) or MinGW-w64 (recommended)
-- **Linux:** GCC (`g++`) — usually pre-installed or available via your package manager
-- **macOS:** GCC via Homebrew (`brew install gcc`) or Apple Clang (both work)
+You need a C++20-capable compiler: GCC 10+ or Clang 12+. Verify with `g++ --version`.
 
-Verify with:
-```bash
-g++ --version   # should say GCC 10+ or Clang 12+
-```
-
-### Windows
-
+**Windows:**
 ```bat
 git clone https://github.com/AmashOnBlitz/cfgen.git
 cd cfgen/scripts/
 build.bat
 ```
+Executable: `build\cfgen.exe`
 
-The executable will be at `build\cfgen.exe`.
-
-To use `cfgen` from anywhere, add the `build\` directory to your `PATH` (see Environment Variables section below).
-
-### Linux
-
+**Linux:**
 ```bash
 git clone https://github.com/AmashOnBlitz/cfgen.git
 cd cfgen/
 chmod +x scripts/build_linux.sh
 ./scripts/build_linux.sh
 ```
+Executable: `build/cfgen`
 
-The executable will be at `build/cfgen`.
-
-> **Windows line endings issue:** If you cloned this repo on Windows and are now building on Linux, or if your editor saved the build script with Windows-style line endings (`\r\n`), you'll get an error like `env: bash\r: No such file or directory` when running the script. The `\r` is invisible but breaks the shebang line. Fix it with:
-> ```bash
-> sed -i 's/\r$//' scripts/build_linux.sh
-> ```
-> Then run `./scripts/build_linux.sh` again. You only need to do this once per clone.
-
-### macOS
-
+**macOS:**
 ```bash
 cd cfgen/
 chmod +x scripts/build_mac.sh
 ./scripts/build_mac.sh
 ```
+The script auto-detects GCC or Clang.
 
-The build script auto-detects whether you have GCC or Clang and adjusts accordingly. If you only have Apple's Clang (no Homebrew GCC), it falls back to `clang++` automatically. C++20 support on Apple Clang requires Xcode 13+ / macOS 12+.
+> **Windows line endings issue:** If the build script shows `env: bash\r: No such file or directory`, the file has Windows-style line endings. Fix it with `sed -i 's/\r$//' scripts/build_linux.sh` (Linux) or `sed -i '' $'s/\r$//' scripts/build_mac.sh` (macOS). Run once per clone.
 
-> **Windows line endings issue:** Same situation as Linux — if the script was ever touched on Windows, you may hit `env: bash\r: No such file or directory`. Fix it with:
-> ```bash
-> sed -i '' $'s/\r$//' scripts/build_mac.sh
-> ```
-> The `''` after `-i` is required on macOS (BSD sed syntax). Linux uses `sed -i` without it.
+### Environment Variables Setup
 
-### Build Script Features
+To run `cfgen` from any terminal without the full path, add its directory to your `PATH`.
 
-Both build scripts share the same behavior:
-- Compile source files **in parallel** for speed.
-- Use **incremental builds** — only recompile files that changed (based on timestamps).
-- Output colored status (`[BUILD]` / `[CACHE]`) per file.
-- Fail fast and show the compiler error if any file fails.
-
----
-
-## Environment Variables Setup
-
-To run `cfgen` from any terminal without specifying the full path, add its directory to your system `PATH`.
-
-**Why this matters:** Without this, you'd have to type `C:\path\to\cfgen\build\cfgen.exe` every time. With it, you just type `cfgen`.
-
-### Windows — PowerShell (temporary, current session only)
-
-```powershell
-$env:PATH += ";C:\path\to\cfgen\build"
-```
-
-### Windows — Permanent via GUI
-
-1. Open **Start**, search for **"Edit the system environment variables"**.
-2. Click **Environment Variables**.
-3. Under **User variables**, find `Path` and click **Edit**.
-4. Click **New** and paste the full path to `cfgen\build\`.
-5. Click OK on all dialogs.
-6. Open a **new** terminal — the change takes effect immediately.
-
-### Windows — Permanent via PowerShell
-
+**Windows (permanent, PowerShell):**
 ```powershell
 [System.Environment]::SetEnvironmentVariable(
     "PATH",
@@ -211,32 +162,124 @@ $env:PATH += ";C:\path\to\cfgen\build"
 )
 ```
 
-### Linux / macOS — Temporary
-
+**Linux / macOS (permanent):**
 ```bash
-export PATH="$PATH:/path/to/cfgen/build"
-```
-
-### Linux / macOS — Permanent
-
-Add the export line to your shell's config file:
-
-```bash
-# For bash:
-echo 'export PATH="$PATH:/path/to/cfgen/build"' >> ~/.bashrc
-source ~/.bashrc
-
-# For zsh:
-echo 'export PATH="$PATH:/path/to/cfgen/build"' >> ~/.zshrc
-source ~/.zshrc
+# bash
+echo 'export PATH="$PATH:/path/to/cfgen/build"' >> ~/.bashrc && source ~/.bashrc
+# zsh
+echo 'export PATH="$PATH:/path/to/cfgen/build"' >> ~/.zshrc && source ~/.zshrc
 ```
 
 ---
 
-## Basic Usage
+## Quick Start: Real-World Tutorial
 
-All commands follow this structure:
+This walkthrough covers the two main use cases: **static macros** for things that never change (your name, your company), and **runtime variables** for things that change every file (class name, project name).
 
+### Step 1 — Register your identity macros once
+
+These are things you type in every file header. Register them once and never think about them again.
+
+```bash
+cfgen -reg -m author "Ada Lovelace"
+cfgen -reg -m company "Babbage & Co."
+cfgen -reg -m license "MIT"
+cfgen -reg -m email   "ada@babbage.co"
+```
+
+`author` and `company` are perfect candidates for registered macros because they're the same across every project you ever work on.
+
+### Step 2 — Create a template
+
+Save this as `cpp_header.h`:
+
+```cpp
+// =======================================================
+// File    : ${filename}
+// Author  : ${author}
+// Company : ${company}
+// License : ${license}
+// Created : ${date}
+// =======================================================
+
+@register ClassName
+@register ProjectName
+
+#ifndef ${upper:${snake:${ClassName}}}_H
+#define ${upper:${snake:${ClassName}}}_H
+
+namespace ${snake:${ProjectName}}
+{
+
+class ${pascal:${ClassName}}
+{
+public:
+    ${pascal:${ClassName}}();
+    ~${pascal:${ClassName}}();
+};
+
+} // namespace ${snake:${ProjectName}}
+
+#endif // ${upper:${snake:${ClassName}}}_H
+```
+
+Notice the split:
+
+- `${author}` and `${company}` come from your registered macros — you set them once and they appear in every generated file automatically.
+- `ClassName` and `ProjectName` are **runtime variables** declared with `@register`. You pass them fresh each time you generate, right on the command line.
+
+### Step 3 — Register the template
+
+```bash
+cfgen -reg -t CppHeader cpp_header.h
+```
+
+### Step 4 — Generate files
+
+```bash
+# Generate a file for a networking class in your "SocketLib" project
+cfgen -gen src/TcpSocket.h CppHeader "-p<TcpSocket,SocketLib>"
+
+# Generate another for a different class, no macro juggling needed
+cfgen -gen src/UdpSocket.h CppHeader "-p<UdpSocket,SocketLib>"
+```
+
+The `-p<ClassName,ProjectName>` values bind to `@register` declarations in order. The output for `TcpSocket.h`:
+
+```cpp
+// =======================================================
+// File    : TcpSocket.h
+// Author  : Ada Lovelace
+// Company : Babbage & Co.
+// License : MIT
+// Created : 2026-02-25
+// =======================================================
+
+#ifndef TCP_SOCKET_H
+#define TCP_SOCKET_H
+
+namespace socket_lib
+{
+
+class Tcpsocket
+{
+public:
+    Tcpsocket();
+    ~Tcpsocket();
+};
+
+} // namespace socket_lib
+
+#endif // TCP_SOCKET_H
+```
+
+`author` and `company` filled in from your stored macros. `ClassName` and `ProjectName` came from the command line — no registry updates required between files.
+
+---
+
+## Command Reference
+
+All commands follow:
 ```
 cfgen <command> [sub-command] [arguments]
 ```
@@ -247,79 +290,77 @@ cfgen <command> [sub-command] [arguments]
 cfgen -h
 ```
 
+### Version
+
+```bash
+cfgen -version
+```
+
+Shows your installed version, fetches the latest version from GitHub, and tells you whether you're up to date, behind, or running a dev build ahead of the latest release. Requires an internet connection for the remote check.
+
+```
+CFGen - Code/File Generator
+---------------------------
+Installed Version : 2.0.0
+Checking for updates...
+Latest Version    : 2.0.0
+Status            : You are using the latest version !
+```
+
 ### Register a Template
 
 ```bash
-cfgen -reg -t MyHeader header_template.h
+cfgen -reg -t <TemplateName> <path/to/file>
 ```
 
-The `-reg -t` command takes two things: a **name** you're assigning to the template, and a **path to the file** that will serve as the template. The name is what you'll use to refer to this template later — in `-gen`, `-del`, or `-show`. Pick something short and descriptive.
+CFGen copies the file into its own internal storage under that name. The original file is no longer referenced after registration — you can move or delete it.
 
-What happens internally: CFGen copies your file into its own storage directory under that name. After registration, the original file is no longer referenced — CFGen has its own copy. You can safely move or delete the source file and the template will still work.
-
+```bash
+cfgen -reg -t CppHeader   templates/cpp_header.h
+cfgen -reg -t PythonMod   ~/boilerplate/py_module.py
+cfgen -reg -t GitIgnore   .gitignore
+cfgen -reg -t CMakeLists  cmake/CMakeLists.txt
 ```
-cfgen -reg -t CppHeader  templates/cpp_header.h   ← name, then file path
-cfgen -reg -t PythonMod  ~/boilerplate/py_mod.py
-cfgen -reg -t GitIgnore  .gitignore
-```
-
-Any plain text file can be a template. The file extension doesn't matter to CFGen — it copies the content verbatim and substitutes macros when you generate. A `.gitignore`, a `CMakeLists.txt`, a Markdown file — all valid.
 
 ### Register a Macro
 
 ```bash
-cfgen -reg -m author "Ada Lovelace"
-cfgen -reg -m company "Babbage & Co."
-cfgen -reg -m project "AnalyticalEngine"
+cfgen -reg -m <name> <value>
 ```
 
-The `-reg -m` command takes a **name** and a **value**. The name is what you write inside `${...}` in your templates. The value is what gets substituted in its place at generation time.
-
-Macros are persistent — you register them once and they're available to every template, every time. Think of them as your personal variables: `author`, `company`, `license`, `email`, whatever you put in every file header. Register them once when you set up CFGen and forget about them.
-
-A few things worth knowing:
-- **Values with spaces must be quoted** on the command line, otherwise the shell splits them as separate arguments.
-- **Names are case-sensitive.** `Author` and `author` are two different macros.
-- **There's no concept of scope.** All macros are global. If you need a different value for a specific generation (like `classname`), you update the macro before generating — either by deleting and re-registering, or by simply using a different name per use case.
+Values with spaces must be quoted. Names are case-sensitive.
 
 ```bash
-# Project-level macros — register once
 cfgen -reg -m author   "Ada Lovelace"
 cfgen -reg -m company  "Babbage & Co."
 cfgen -reg -m license  "MIT"
-
-# Per-file macros — update as you work
-cfgen -reg -m classname "Socket"
-cfgen -gen src/Socket.h CppHeader
-
-cfgen -del -m classname
-cfgen -reg -m classname "EventLoop"
-cfgen -gen src/EventLoop.h CppHeader
+cfgen -reg -m email    "ada@babbage.co"
 ```
 
 ### Generate a File
 
 ```bash
-cfgen -gen output/MyClass.h MyHeader
+# Standard generation
+cfgen -gen <output-path> <TemplateName>
+
+# With runtime variables
+cfgen -gen <output-path> <TemplateName> "-p<val1,val2,...>"
 ```
 
-This reads the `MyHeader` template, resolves all macros and transforms, and writes the result to `output/MyClass.h`. The directory will be created if it doesn't exist.
+```bash
+# No runtime variables needed
+cfgen -gen src/config.json JsonConfig
+
+# With runtime variables
+cfgen -gen src/Engine.h CppHeader "-p<Engine,GameLib>"
+```
+
+The output directory is created automatically if it doesn't exist (one level deep).
 
 ### List Templates
 
 ```bash
 cfgen -show -t
-```
-
-Output:
-```
-Templates:
-----------------------------------------------------
-| #  | Template Name         | File Path           |
-----------------------------------------------------
-| 1  | MyHeader              | header_template.h   |
-| 2  | CppClass              | class_template.cpp  |
-----------------------------------------------------
 ```
 
 ### List Macros
@@ -331,20 +372,20 @@ cfgen -show -m
 ### Delete a Template
 
 ```bash
-cfgen -del -t MyHeader
+cfgen -del -t <TemplateName>
 ```
 
 ### Delete a Macro
 
 ```bash
-cfgen -del -m author
+cfgen -del -m <name>
 ```
 
 ### Show Storage Locations
 
 ```bash
-cfgen -show -trdir   # Where templates.map is stored
-cfgen -show -mrdir   # Where macros.map is stored
+cfgen -show -trdir   # where templates.map is stored
+cfgen -show -mrdir   # where macros.map is stored
 ```
 
 ---
@@ -353,84 +394,36 @@ cfgen -show -mrdir   # Where macros.map is stored
 
 ### What a Template Is
 
-A template is any plain text file — a `.h`, `.cpp`, `.py`, `.json`, `.md`, whatever. Inside it, you write `${macroname}` wherever you want a value substituted. Everything else in the file is kept exactly as-is.
-
-### Where Templates Are Stored
-
-When you register a template with `-reg -t`, CFGen does two things: it copies your file into its own internal directory, and it adds an entry to its record file so it knows the name-to-file mapping.
-
-The internal storage location is:
-
-```
-Windows:  %APPDATA%\CFGen\<TemplateName>\<original_filename>
-Linux:    ~/.config/CFGen/<TemplateName>/<original_filename>
-macOS:    ~/Library/Application Support/CFGen/<TemplateName>/<original_filename>
-```
-
-Each template gets its own subdirectory named after the template. So if you register `MyHeader` from `header_template.h`, the stored copy lives at something like `%APPDATA%\CFGen\MyHeader\header_template.h`. The original filename is preserved inside that folder.
-
-The full registry of template names is kept in `templates.map` in the same base directory. It's a plain text file — you can open it and read it, though you shouldn't need to edit it manually. Use `-show -trdir` to find out exactly where it is on your machine.
-
-When you delete a template with `-del -t`, CFGen removes both the entry from the record file and the stored script file. It cleans up after itself.
+A template is any plain text file — `.h`, `.cpp`, `.py`, `.json`, `.md`, anything. Inside it, you write `${macroname}` wherever you want a value substituted. Everything else is kept exactly as-is.
 
 ### Macro Syntax
-
-Macros use `${...}` syntax:
 
 ```
 ${macroname}
 ```
 
-Example template:
-```cpp
-// File    : ${filename}
-// Author  : ${author}
-// Created : ${date}
+### `@register` — Runtime Variable Declarations
 
-#ifndef ${upper:${stem}}_H
-#define ${upper:${stem}}_H
+Place `@register <varname>` directives at the top of your template to declare variables that are provided at generation time:
 
-class ${pascal:${classname}}
-{
-public:
-    ${pascal:${classname}}();
-    ~${pascal:${classname}}();
-};
-
-#endif // ${upper:${stem}}_H
+```
+@register ClassName
+@register ModuleName
 ```
 
-When you run `cfgen -gen MyClass.h MyHeader`, and you have `classname` registered as `my_class`, this generates:
-
-```cpp
-// File    : MyClass.h
-// Author  : Ada Lovelace
-// Created : 2026-02-17
-
-#ifndef MYCLASS_H
-#define MYCLASS_H
-
-class MyClass
-{
-public:
-    MyClass();
-    ~MyClass();
-};
-
-#endif // MYCLASS_H
-```
+These lines are stripped from the output entirely. The variables they declare are populated from the `-p<...>` flag in order of appearance.
 
 ### Naming Conventions
 
-Template names and macro names are case-sensitive strings. Recommended conventions:
-- Template names: `PascalCase` or `snake_case` (e.g., `CppHeader`, `python_module`)
-- Macro names: `lowercase` (e.g., `author`, `company`, `classname`)
+- Template names: `PascalCase` or `snake_case` — e.g., `CppHeader`, `python_module`
+- Macro names: `lowercase` — e.g., `author`, `company`
+- Runtime variable names: `PascalCase` recommended — e.g., `ClassName`, `ProjectName`
 
 ---
 
 ## Built-in Default Macros
 
-These are resolved automatically — no registration needed. They reflect the current state at the moment of generation.
+These resolve automatically at generation time — no registration needed.
 
 ### File Information
 
@@ -457,17 +450,103 @@ These are resolved automatically — no registration needed. They reflect the cu
 
 ---
 
-## Template Transforms & Logic
+## Runtime Variables
+
+Runtime variables let you pass per-generation values directly on the command line, without touching the macro registry. They're ideal for things that change with every file: class names, module names, feature flags, version strings.
+
+### How They Work
+
+**1. Declare in the template with `@register`:**
+
+```
+@register ClassName
+@register ModuleName
+@register FeatureFlag
+```
+
+**2. Pass values at generation time with `-p<...>`:**
+
+```bash
+cfgen -gen src/Parser.h CppHeader "-p<Parser,Lexer,true>"
+```
+
+Values bind to `@register` declarations **in order**. So `ClassName=Parser`, `ModuleName=Lexer`, `FeatureFlag=true`.
+
+**3. Use in the template like any other macro:**
+
+```cpp
+class ${pascal:${ClassName}} : public ${ModuleName}Base
+{
+    bool m_enabled { ${lower:${FeatureFlag}} };
+};
+```
+
+### Runtime Variables vs. Registered Macros
+
+| | Registered Macros | Runtime Variables |
+|---|---|---|
+| **Set with** | `cfgen -reg -m name value` | `-p<val1,val2>` at generation time |
+| **Persist** | Yes — until deleted | No — per-generation only |
+| **Best for** | Author, company, license, email | Class name, project name, module name |
+| **Template syntax** | `${author}` | `${ClassName}` (after `@register ClassName`) |
+
+### Example: A Reusable C++ Class Template
+
+Template file `cpp_class.h`:
+```cpp
+// Author  : ${author}          ← from macro registry, always the same
+// Company : ${company}         ← from macro registry, always the same
+// File    : ${filename}        ← built-in, resolved automatically
+// Created : ${date}            ← built-in, resolved automatically
+
+@register ClassName
+@register BaseClass
+
+#ifndef ${upper:${snake:${ClassName}}}_H
+#define ${upper:${snake:${ClassName}}}_H
+
+class ${pascal:${ClassName}} : public ${pascal:${BaseClass}}
+{
+public:
+    ${pascal:${ClassName}}();
+    virtual ~${pascal:${ClassName}}() = default;
+};
+
+#endif
+```
+
+Usage:
+```bash
+# Generate three different classes without touching the registry once
+cfgen -gen src/Button.h    CppClass "-p<Button,Widget>"
+cfgen -gen src/TextInput.h CppClass "-p<TextInput,Widget>"
+cfgen -gen src/Checkbox.h  CppClass "-p<Checkbox,Widget>"
+```
+
+### Error Handling
+
+If you provide **fewer** values than `@register` declarations, CFGen prints a diagnostic and aborts:
+
+```
+Runtime Variables:
+------------------
+ClassName   ---> Parser
+ModuleName  --->  ?
+
+[Error] Template requires 2 runtime variables, but only 1 were provided.
+```
+
+If you provide **more** values than declared, the extras are ignored with a warning.
+
+---
+
+## Template Transforms
 
 ### Applying a Transform
-
-Transforms follow this syntax:
 
 ```
 ${transform:${macroname}}
 ```
-
-The transform name comes before the colon. The macro to transform comes after, wrapped in `${}`.
 
 ```
 ${upper:${author}}          → ADA LOVELACE
@@ -495,55 +574,36 @@ ${trim:${whitespace_macro}} → trimmed value
 | `reverse` | `abc` | `cba` |
 | `trim` | `  padded  ` | `padded` |
 
-**`snake` on space-separated input:** Spaces become underscores, uppercase letters get an underscore prepended. `Code File Generator` → `code__file__generator`. If you want clean snake_case, use a value without capital letters or spaces.
-
-**`slug`:** Strips everything except alphanumerics, spaces, underscores, and dashes. Replaces them all with hyphens. Good for URLs or file slugs.
-
 ### Chaining / Nesting Transforms
 
-You can nest transforms to apply multiple operations:
+Nest transforms to apply multiple operations. The inner expression resolves first:
 
 ```
 ${upper:${snake:${classname}}}
 ```
 
-This first resolves `${classname}`, applies `snake` to it, then applies `upper` to that result. Nesting is supported up to 32 levels deep (you'll never realistically hit this).
+For `classname = PressureTest` → `snake` → `pressure_test` → `upper` → `PRESSURE_TEST`.
 
-**The syntax rule:** The inner expression must always be a full `${...}` expression, not a raw string. This is valid:
-
+This is valid syntax:
 ```
 ${upper:${snake:${classname}}}    ✓
 ```
 
 This is not:
-
 ```
-${upper:snake:${classname}}       ✗  (invalid — ambiguous parse)
-```
-
-### Transforms Applied to Built-in Macros
-
-Built-in macros can also be transformed:
-
-```
-${upper:${stem}}        → MYCLASS   (from output filename)
-${slug:${month}}        → february
-${lower:${weekday}}     → tuesday
+${upper:snake:${classname}}       ✗  (ambiguous parse — will error)
 ```
 
-### Practical Example: Header Guard
-
-A common pattern for C++ include guards:
+### Practical Example: C++ Header Guard
 
 ```cpp
-#ifndef ${upper:${snake:${classname}}}_H
-#define ${upper:${snake:${classname}}}_H
+#ifndef ${upper:${snake:${ClassName}}}_H
+#define ${upper:${snake:${ClassName}}}_H
 // ...
-#endif // ${upper:${snake:${classname}}}_H
+#endif // ${upper:${snake:${ClassName}}}_H
 ```
 
-If `classname` is `PressureTest`, this produces:
-
+With `ClassName = PressureTest`:
 ```cpp
 #ifndef PRESSURE_TEST_H
 #define PRESSURE_TEST_H
@@ -558,39 +618,38 @@ If `classname` is `PressureTest`, this produces:
 ### Workflow: Setting Up a New Project
 
 ```bash
-# Register your project-level macros once
-cfgen -reg -m author "Ada Lovelace"
-cfgen -reg -m company "Babbage & Co."
-cfgen -reg -m project "AnalyticalEngine"
-cfgen -reg -m license "MIT"
+# 1. Register identity macros once (do this when you first install CFGen)
+cfgen -reg -m author   "Ada Lovelace"
+cfgen -reg -m company  "Babbage & Co."
+cfgen -reg -m license  "MIT"
 
-# Register templates
-cfgen -reg -t CppHeader templates/cpp_header.h
-cfgen -reg -t CppClass  templates/cpp_class.cpp
-cfgen -reg -t CppTest   templates/cpp_test.cpp
+# 2. Register your templates
+cfgen -reg -t CppHeader  templates/cpp_header.h
+cfgen -reg -t CppClass   templates/cpp_class.cpp
+cfgen -reg -t CppTest    templates/cpp_test.cpp
+cfgen -reg -t PythonMod  templates/py_module.py
 
-# Generate files as you work
-cfgen -reg -m classname "Millwork"
-cfgen -gen src/Millwork.h  CppHeader
-cfgen -gen src/Millwork.cpp CppClass
-cfgen -gen tests/Millwork_test.cpp CppTest
+# 3. Generate files as you work — runtime vars for everything per-file
+cfgen -gen src/Millwork.h    CppHeader "-p<Millwork,MachineLib>"
+cfgen -gen src/Millwork.cpp  CppClass  "-p<Millwork,MachineLib>"
+cfgen -gen tests/Millwork_test.cpp CppTest "-p<Millwork>"
 ```
 
-### Swapping Macros for Context
+No registry updates between files. Everything that's unique to each file goes through `-p<...>`.
 
-Macros are global, so you update them before generating a context-specific file:
+### When to Use Macros vs. Runtime Variables
 
-```bash
-cfgen -del -m classname
-cfgen -reg -m classname "Gearbox"
-cfgen -gen src/Gearbox.h CppHeader
-```
+Use **registered macros** for values that are the same across all your work:
+- Your full name, email, company name, default license
 
-This is intentional. CFGen doesn't have per-file variable scoping — it's a simple tool. For complex templating with prompts and branching, you'd reach for something heavier.
+Use **runtime variables** for values that change with each file you generate:
+- Class name, module name, base class, feature flag, version string, project name
+
+If a value is the same 95% of the time but sometimes differs, register it as a macro and override it via a runtime variable in templates that need the flexibility.
 
 ### Checking What's Registered
 
-Before generating, confirm your macros are what you expect:
+Before generating, confirm macros are what you expect:
 
 ```bash
 cfgen -show -m
@@ -599,10 +658,9 @@ cfgen -show -t
 
 ### Using `${cwd}` vs `${dir}`
 
-- `${cwd}` is where you're running `cfgen` from — your project root, usually.
-- `${dir}` is the directory of the output file you specified in `-gen`.
+`${cwd}` is where you're running `cfgen` from — your project root, usually. `${dir}` is the directory of the output file you specified.
 
-If you run `cfgen -gen src/net/Socket.h MyHeader` from `/home/user/project`:
+Running `cfgen -gen src/net/Socket.h MyHeader` from `/home/user/project`:
 - `${cwd}` → `/home/user/project`
 - `${dir}` → `./src/net`
 - `${filename}` → `Socket.h`
@@ -610,7 +668,7 @@ If you run `cfgen -gen src/net/Socket.h MyHeader` from `/home/user/project`:
 
 ### Generating Into Subdirectories
 
-If the output path's parent directory doesn't exist, CFGen creates one level automatically:
+If the output path's parent directory doesn't exist, CFGen creates it automatically:
 
 ```bash
 cfgen -gen output/new_dir/file.h MyTemplate   # creates output/new_dir/ if needed
@@ -622,43 +680,51 @@ cfgen -gen output/new_dir/file.h MyTemplate   # creates output/new_dir/ if neede
 
 ### "Macro Not Registered" Warning
 
-If you use `${something}` in a template and `something` isn't a built-in macro and isn't registered, CFGen prints a warning and substitutes an empty string:
+If `${something}` is in a template and `something` isn't a built-in macro, runtime variable, or registered macro, CFGen warns and substitutes an empty string:
 
 ```
 [Warning] Macro Not Registered : something | Ignoring Macro
 ```
 
-The file still gets generated — the field just ends up blank. Fix it by registering the macro:
+Fix it by registering the macro or passing the value as a runtime variable.
 
-```bash
-cfgen -reg -m something "my value"
+### Missing Runtime Parameter
+
+If a template has more `@register` declarations than values provided with `-p<...>`:
+
+```
+[Error] Template requires 3 runtime variables, but only 1 were provided.
 ```
 
-### Mismatched Braces
+Check the count of `@register` lines in your template and match them in `-p<val1,val2,val3>`.
 
-If you write `${upper:${stem}` (missing closing brace), CFGen will detect it:
+### Extra Runtime Parameters
+
+If you pass more values than `@register` declarations:
+
+```
+[Error] Too many runtime parameters provided.
+Some values passed with -p<...> were not used.
+```
+
+CFGen warns but still generates the file using only the values it could bind.
+
+### Mismatched Braces
 
 ```
 [Error] Macro braces are not balanced. Missing '${' or '}'.
 ```
 
-Check the template file for unclosed `${`.
+Check the template for any unclosed `${`.
 
 ### Invalid Transform Syntax
 
-The transform syntax requires the inner expression to be a full `${}` token. This will error:
+The inner expression must be a full `${}` token:
 
 ```
-${upper:stem}     ← wrong, 'stem' is not wrapped in ${}
+${upper:stem}       ← wrong
+${upper:${stem}}    ← correct
 ```
-
-Correct form:
-
-```
-${upper:${stem}}
-```
-
-Error message: `[Error] Invalid transform format. Use: ${transform:${macro}}`
 
 ### Template Already Exists
 
@@ -666,63 +732,11 @@ Error message: `[Error] Invalid transform format. Use: ${transform:${macro}}`
 ERROR : Template With This Name Already Exists!
 ```
 
-You already registered a template with that name. Either delete it first (`cfgen -del -t Name`) or pick a different name.
-
-### Template File Not Found During Generation
-
-```
-ERROR : Cannot Read The Template Requested!
-```
-
-The template is registered in the record but its stored script file is missing. This can happen if you manually deleted files from the CFGen data directory. Delete the broken registration and re-register:
-
-```bash
-cfgen -del -t BrokenTemplate
-cfgen -reg -t BrokenTemplate path/to/template/file.h
-```
+Delete first or pick a different name: `cfgen -del -t Name`
 
 ### "snake" Produces Double Underscores
 
-`snake` inserts an underscore before each uppercase letter and replaces spaces with underscores. If your input is `Code File Generator` (space-separated words starting with capitals), you'll get `code__file__generator` — one underscore from the capital, one from the space.
-
-To avoid this, store your macro value in all-lowercase if you plan to snake_case it, or just be aware of the output format.
-
-### Build Script Fails with `bash\r: No such file or directory`
-
-This is a Windows line endings problem. It happens when the build script (`build.sh` or `build_mac.sh`) was saved or edited on Windows, which writes `\r\n` line endings instead of the Unix `\n`. The `\r` character attaches invisibly to the shebang line (`#!/usr/bin/env bash\r`), and the OS tries to find an interpreter literally named `bash\r` — which doesn't exist.
-
-The error looks like:
-
-```
-env: bash\r: No such file or directory
-```
-
-or sometimes just:
-
-```
-./build.sh: line 1: $'\r': command not found
-```
-
-Fix on **Linux:**
-```bash
-sed -i 's/\r$//' build.sh
-```
-
-Fix on **macOS** (BSD sed requires the `''` argument and a slightly different syntax):
-```bash
-sed -i '' $'s/\r$//' scripts/build_mac.sh
-```
-
-Run the script again after fixing — you only need to do this once per clone. If you want to prevent it from happening again, configure Git to not convert line endings on checkout:
-
-```bash
-git config core.autocrlf false
-```
-
-Or add a `.gitattributes` file to the repo root:
-```
-*.sh text eol=lf
-```
+`snake` inserts an underscore before each uppercase letter and replaces spaces with underscores. Input `Code File Generator` → `code__file__generator` — one underscore from the capital, one from the space. Store space-separated values in all-lowercase if you plan to `snake` them.
 
 ### Checking Where Data Is Stored
 
@@ -731,7 +745,7 @@ cfgen -show -trdir   # template record file path
 cfgen -show -mrdir   # macro record file path
 ```
 
-You can open these `.map` files in any text editor — they're plain text with a simple `name.key<=@=>val.value` format.
+The `.map` files are plain text with a `name.key<=@=>val.value` format — readable in any editor.
 
 ---
 
@@ -743,7 +757,7 @@ You can open these `.map` files in any text editor — they're plain text with a
 | **Cookiecutter** | Full project scaffolding with prompts | You're generating an entire directory structure, not individual files |
 | **IDE snippets** | In-editor template insertion | You never leave your editor and don't need cross-tool consistency |
 | **Shell scripts** | Custom one-off generation | You need conditional logic, loops, or external tool integration |
-| **Jinja2 / Tera** | Template rendering as part of a build pipeline | You need full template language features inside a larger system |
+| **Jinja2 / Tera** | Template rendering inside a build pipeline | You need a full template language as part of a larger system |
 
 **CFGen is the right choice when:**
 - You're generating individual files (headers, modules, configs) repeatedly across projects.
@@ -759,12 +773,11 @@ You can open these `.map` files in any text editor — they're plain text with a
 
 ## Contributing
 
-If you find a bug, have a feature idea, or want to add a transform — contributions are welcome.
+Contributions are welcome. A few expectations:
 
-A few expectations:
-- Keep it C++20. No third-party libraries unless there's a really good reason.
-- Match the existing code style. It's consistent — keep it that way.
-- If you add a transform, add a test case in `Tests/Input/` and verify the output matches `Tests/Outputs/`.
+- Keep it C++20. No third-party libraries without a strong reason.
+- Match the existing code style.
+- If you add a transform, add a test case in `Tests/Input/` and verify output matches `Tests/Outputs/`.
 - Error handling should be explicit. Don't silently swallow failures.
 - If you're fixing a bug, a minimal repro case in the issue is appreciated before a PR.
 
@@ -781,6 +794,6 @@ To build and test locally:
 
 CFGen was written by a student who was tired of typing the same header comment block for the fifth time this week. If it saves you that same annoyance, that's exactly what it's for.
 
-And yes if you are wondering, **I took help from AI to build this Readme but not with the code** 
+And yes — **I took help from AI to write this README, but not with the code otherwise I could have have got someting TRASH!**
 
 If something's broken, missing, or confusing — open an issue. Feedback from actual use is more useful than anything else.
