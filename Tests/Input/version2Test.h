@@ -7,7 +7,7 @@
 // ISO Time   : ${iso_date}
 // Unix Time  : ${unix_time}
 //
-// Use this -p<MyApp,Core,TestClass,FooBarBaz,Object,true, v2.0.0 >
+// Use this -p"<MyApp,Core,TestClass,FooBarBaz,Object,true, v2.0.0 >"
 // ============================================================
 
 #pragma once
