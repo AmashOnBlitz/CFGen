@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <unordered_set>
 
 std::filesystem::path ProcFilePath;
 
@@ -342,6 +343,154 @@ void handleTemplateMacros(
     }
 }
 
+std::vector<std::string> parseRuntimeParams(int argc, const char* argv[])
+{
+    for (int i = 0; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg.size() >= 3 && arg.substr(0, 3) == "-p<" && arg.back() == '>') {
+            std::string inner = arg.substr(3, arg.size() - 4);
+
+            std::vector<std::string> out;
+            size_t pos = 0;
+            while (true) {
+                size_t comma = inner.find(',', pos);
+                if (comma == std::string::npos) {
+                    out.push_back(inner.substr(pos));
+                    break;
+                }
+                out.push_back(inner.substr(pos, comma - pos));
+                pos = comma + 1;
+            }
+            return out;
+        }
+    }
+    return {};
+}
+
+static void printRuntimeBindings(
+    const std::vector<std::string>& registerOrder,
+    const std::vector<std::pair<std::string, std::string>>& macros,
+    size_t expectedCount,
+    size_t providedCount
+) {
+    if (registerOrder.empty()) return;
+
+    std::cout << "\nRuntime Variables:\n";
+    std::cout << "------------------\n";
+
+    for (const auto& name : registerOrder) {
+        auto it = std::find_if(
+            macros.begin(), macros.end(),
+            [&](const auto& p) { return p.first == name; }
+        );
+
+        if (it != macros.end() && !it->second.empty())
+            std::cout << name << "\t" << "---> " << it->second << "\n";
+        else
+            std::cout << name << "\t" << "---> ?\n";
+    }
+
+    if (providedCount < expectedCount) {
+        std::cout
+            << "\n[Error] Template requires "
+            << expectedCount
+            << " runtime variables, but only "
+            << providedCount
+            << " were provided.\n";
+    }
+}
+
+bool processRuntimeRegisters(
+    std::string& content,
+    const std::vector<std::string>& runtimeParams,
+    std::vector<std::pair<std::string, std::string>>& outMacros,
+    std::vector<std::string>& registerOrder
+) {
+    std::string result;
+    size_t paramIndex = 0;
+    bool missingParam = false;
+    std::unordered_set<std::string> seen;
+
+    size_t pos = 0;
+    while (pos < content.size()) {
+        size_t end = content.find('\n', pos);
+        if (end == std::string::npos)
+            end = content.size();
+
+        std::string line = content.substr(pos, end - pos);
+        std::string trimmed = line;
+        trimmed.erase(0, trimmed.find_first_not_of(" \t"));
+
+        if (trimmed.size() >= 9 &&
+            std::equal(trimmed.begin(), trimmed.begin() + 9,
+                "@register", [](char a, char b) {
+                    return std::tolower(a) == std::tolower(b);
+                }))
+        {
+            std::string var = trimmed.substr(9);
+            var.erase(0, var.find_first_not_of(" \t"));
+
+            if (var.empty()) {
+                std::cout
+                    << Constants::Instance().GetErrorString(
+                        ERRORCODE_EMPTY_REGISTER_NAME)
+                    << "\n";
+                return false;
+            }
+
+            if (!seen.insert(var).second) {
+                std::cout
+                    << Constants::Instance().GetErrorString(
+                        ERRORCODE_DUPLICATE_REGISTER)
+                    << var << "\n";
+                return false;
+            }
+
+            registerOrder.push_back(var);
+
+            if (paramIndex < runtimeParams.size()) {
+                outMacros.emplace_back(var, runtimeParams[paramIndex]);
+            } else {
+                outMacros.emplace_back(var, "");
+                missingParam = true;
+            }
+
+            paramIndex++;
+        }
+        else {
+            result += line;
+            if (end < content.size()) result += '\n';
+        }
+
+        pos = end + 1;
+    }
+
+    content.swap(result);
+
+    if (!registerOrder.empty()) {
+        printRuntimeBindings(
+            registerOrder,
+            outMacros,
+            registerOrder.size(),
+            runtimeParams.size()
+        );
+    }
+
+    if (missingParam) {
+        return false;
+    }
+
+    if (paramIndex < runtimeParams.size()) {
+        std::cout
+            << Constants::Instance().GetErrorString(
+                ERRORCODE_EXTRA_RUNTIME_PARAMS)
+            << "\n";
+    }
+
+    return true;
+}
+
+
 std::string GenFile(int argc, const char* argv[])
 {
     std::string outname(argv[2]);
@@ -359,7 +508,26 @@ std::string GenFile(int argc, const char* argv[])
     if (!ok)
         return templateContent;
 
-    const auto& macros = getMacroTable();
+    auto runtimeParams = parseRuntimeParams(argc, argv);
+    std::vector<std::pair<std::string, std::string>> runtimeMacros;
+    std::vector<std::string> registerOrder;
+
+    if (!processRuntimeRegisters(
+            templateContent,
+            runtimeParams,
+            runtimeMacros,
+            registerOrder
+        ))
+    {
+        return Constants::Instance().GetErrorString(
+            ERRORCODE_RUNTIME_PARAM_MISSING
+        );
+    }
+
+    auto macros = getMacroTable();
+    macros.insert(macros.end(),
+              runtimeMacros.begin(),
+              runtimeMacros.end());
     handleTemplateMacros(templateContent, macros);
 
     if (!std::filesystem::exists(ProcFilePath.parent_path()) && ProcFilePath.has_parent_path()){
