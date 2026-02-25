@@ -165,6 +165,19 @@ void Constants::initializeErrorStrings()
         "[Warning] Version check is currently unavailable.\n"
         "Proceeding without update verification.\n";
 
+    errorMap[ERRORCODE_EMPTY_REGISTER_NAME] =
+        "[Error] Invalid @register directive.\n"
+        "A variable name must be specified after @register.\n";
+
+    errorMap[ERRORCODE_DUPLICATE_REGISTER] =
+        "[Error] Duplicate @register variable detected: ";
+
+    errorMap[ERRORCODE_RUNTIME_PARAM_MISSING] =
+        "[Error] Missing runtime parameter for registered variable: ";
+
+    errorMap[ERRORCODE_EXTRA_RUNTIME_PARAMS] =
+        "[Error] Too many runtime parameters provided.\n"
+        "Some values passed with -p<...> were not used.\n";
 }
 
 void Constants::initializeGeneralStrings()
@@ -176,25 +189,45 @@ void Constants::initializeGeneralStrings()
         "  cfgen <command> [sub-command] [options]\n"
         "\n"
         "Commands:\n"
-        "  -h                                              Show This Help Message\n"
-        "  " COMMAND_GEN            "    <file-name> <tpl>                    Generate A File Using A Template\n"
-        "  " COMMAND_REGISTER       " -m <macro-name> <value>                 To Register A Macro\n"
-        "  " COMMAND_REGISTER       " -t <template-name> <template-file-name> To Register A Template For File generation\n"
-        "  " COMMAND_DELETE         " -m <macro-name>                         Delete A Macro\n"
-        "  " COMMAND_DELETE         " -t <template-name>                      Delete A Template\n"
-        "  " COMMAND_SHOW           " -t                                      Show Available Templates\n"
-        "  " COMMAND_SHOW           " -m                                      Show Available Macroes\n"
-        "  " COMMAND_SHOW           " -trdir                                  Show Template Records File Dir\n"
-        "  " COMMAND_SHOW           " -mrdir                                  Show Macro Records File Dir\n"
-        "  " COMMAND_VERSION        "                                         Shows Version\n"
+        "  -h                                                    Show This Help Message\n"
+        "  " COMMAND_GEN            "    <file-name> <tpl>                       Generate A File Using A Template\n"
+        "  " COMMAND_GEN            "    <file-name> <tpl> \"-p<val1,val2,...>\"   Generate A File Using A Template With Runtime Variables\n"
+        "  " COMMAND_REGISTER       " -m <macro-name> <value>                    To Register A Macro\n"
+        "  " COMMAND_REGISTER       " -t <template-name> <template-file-name>    To Register A Template For File generation\n"
+        "  " COMMAND_DELETE         " -m <macro-name>                            Delete A Macro\n"
+        "  " COMMAND_DELETE         " -t <template-name>                         Delete A Template\n"
+        "  " COMMAND_SHOW           " -t                                         Show Available Templates\n"
+        "  " COMMAND_SHOW           " -m                                         Show Available Macroes\n"
+        "  " COMMAND_SHOW           " -trdir                                     Show Template Records File Dir\n"
+        "  " COMMAND_SHOW           " -mrdir                                     Show Macro Records File Dir\n"
+        "  " COMMAND_VERSION        "                                            Shows Version\n"
         "\n"
         "Examples:\n"
         "  cfgen -h\n"
         "  cfgen " COMMAND_GEN  " main.c mainTemplate\n"
         "  cfgen " COMMAND_REGISTER " -m Name Foo_Bar_Baz\n"
         "  cfgen " COMMAND_DELETE   " -m Name\n"
-        "  cfgen " COMMAND_DELETE   " -t Temp1\n";
-        "  cfgen " COMMAND_VERSION  "\n";
+        "  cfgen " COMMAND_DELETE   " -t Temp1\n"
+        "  cfgen " COMMAND_VERSION  "\n"
+        "\nRuntime Parameters:\n"
+        "  \"-p<val1,val2,...>\"   Provide runtime values for @register variables\n"
+        "                        Values bind in the order @register appears\n"
+        "                        Missing values cause generation to fail\n"
+        "                        Extra values are ignored with a warning\n"
+        "\n"
+        "Template Usage:\n"
+        "  @register name        Declares a runtime variable\n"
+        "  ${name}               Use the runtime variable\n"
+        "\n"
+        "Runtime Example:\n"
+        "  Template:\n"
+        "    @register ClassName\n"
+        "    class ${ClassName} {}\n"
+        "\n"
+        "  Command:\n"
+        "    cfgen gen MyClass.cpp cppclass \"-p<MyClass>\"\n"
+        "\n"
+        "\nRefer To https://github.com/AmashOnBlitz/CFGen/blob/main/docs/README.md For More Help!\n";
         
     stringMap[STRINGCODE_TEMPLATE_REG_SUCCESSFULL] = "Template Registeration Succesfull ------\n";
     stringMap[STRINGCODE_TEMPLATE_DEL_SUCCESSFULL] = "Template Deletion Succesfull ------\n";
@@ -205,7 +238,7 @@ void Constants::initializeGeneralStrings()
     stringMap[STRINGCODE_MACR_DEL_SUCCESSFULL] = "Macro Deletion Succesfull ------\n";
     stringMap[STRINGCODR_MACR_FILE_DONT_EXIST_YET] = 
         "Macro Record File Does Not Exist Yet\n"
-        "Try Adding Some Macro! ---";
+        "Try Adding Some Macros! ---";
     stringMap[STRINGCODE_MACR_NOT_REGISTERED] = "[Warning] Macro Not Registered : ";
     stringMap[STRINGCODE_FILE_GENERATED] = "[OK] File generated: ";
 
@@ -231,6 +264,12 @@ void Constants::initializeGeneralStrings()
     stringMap[STRINGCODE_VERSION_BETA] =
         "Status            : You are running a newer (beta/dev) version!\n"
         "This version is ahead of the latest public release.\n";
+
+    stringMap[STRINGCODE_REGISTER_IGNORED] =
+        "[Warning] Runtime register ignored: ";
+
+    stringMap[STRINGCODE_RUNTIME_PARAM_UNUSED] =
+        "[Warning] Unused runtime parameter: ";
 
 
 }

@@ -1,6 +1,6 @@
 #ifndef VERSION_HEADER
 #define VERSION_HEADER
-#define VERSION "0.9.0"
+#define VERSION "2.0.0"
 
 #include "globals.h"
 #include <fstream>

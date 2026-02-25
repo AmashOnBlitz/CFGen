@@ -47,7 +47,11 @@ enum ERRORCODE : int {
     ERRORCODE_FILE_ALR_EXISTS                       = 0x0134f,
     ERRORCODE_FAILED_TO_FETCH_REMOTE_VERSION        = 0x0135f,
     ERRORCODE_REMOTE_VERSION_EMPTY                  = 0x0136f,
-    ERRORCODE_VERSION_CHECK_NOT_AVAILABLE           = 0x0137f
+    ERRORCODE_VERSION_CHECK_NOT_AVAILABLE           = 0x0137f,
+    ERRORCODE_EMPTY_REGISTER_NAME                   = 0x0138f,
+    ERRORCODE_DUPLICATE_REGISTER                    = 0x0139f,
+    ERRORCODE_RUNTIME_PARAM_MISSING                 = 0x0140f,
+    ERRORCODE_EXTRA_RUNTIME_PARAMS                  = 0x0141f,          
 };
 
 // Codes 0x0200f to 0x0400f Reserved For Error Strings
@@ -67,7 +71,9 @@ enum STRINGCODE : int{
     STRINGCODE_VERSION_CHECKING                     = 0x0213f,
     STRINGCODE_VERSION_LOCAL                        = 0x0214f,
     STRINGCODE_VERSION_REMOTE                       = 0x0215f,
-    STRINGCODE_VERSION_BETA                         = 0x0216f
+    STRINGCODE_VERSION_BETA                         = 0x0216f,
+    STRINGCODE_REGISTER_IGNORED                     = 0x0217f,
+    STRINGCODE_RUNTIME_PARAM_UNUSED                 = 0x0218f,
 };
 
 class Constants
