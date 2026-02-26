@@ -299,6 +299,8 @@ cfgen -version
 
 Shows your installed version, fetches the latest version from GitHub, and tells you whether you're up to date, behind, or running a dev build ahead of the latest release. Requires an internet connection for the remote check.
 
+Version checking is **not automatic**. This decision was made **intentionally** to **avoid unnecessary network calls** and **startup delays** during small or repetitive generation tasks. Developers can invoke version checks explicitly when needed.
+
 ```
 CFGen - Code/File Generator
 ---------------------------
